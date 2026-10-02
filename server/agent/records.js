@@ -105,7 +105,7 @@ export function registerActivity(db, expense, { silent }) {
       activity.planId = plan.id;
       activity.participantIds = plan.memberIds;
     } else {
-      activity.participantIds = members.map((e) => e.id);
+      activity.participantIds = members.filter((e) => !e.guest).map((e) => e.id);
     }
     log("기록", `${expense.dept} 전표 ${expense.docNo} → "${venue.name}" 활동 기록 자동 등록${plan ? " (기획과 연결)" : ""}`);
 

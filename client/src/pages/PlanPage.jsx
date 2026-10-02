@@ -92,7 +92,13 @@ function PlanForm() {
               </select>
             </label>
             <label>1인당 예산 (선택)
-              <input type="number" min="0" step="1000" value={form.budgetPerHead || ""} placeholder="예) 30000" onChange={(e) => setForm((f) => ({ ...f, budgetPerHead: Number(e.target.value) }))} />
+              {/* 숫자만 받아서 세 자리마다 쉼표를 넣어 보여 준다 (type="number"는 쉼표를 표시할 수 없다) */}
+              <span className="won-input">
+                <input type="text" inputMode="numeric" autoComplete="off" placeholder="예) 30,000"
+                  value={form.budgetPerHead ? form.budgetPerHead.toLocaleString("ko-KR") : ""}
+                  onChange={(e) => setForm((f) => ({ ...f, budgetPerHead: Number(e.target.value.replace(/\D/g, "").slice(0, 9)) }))} />
+                <i>원</i>
+              </span>
             </label>
           </div>
           <p className="muted small">개인 프로필에 적어 둔 식이 제한·음주 여부·선호 유형은 장소 추천에 자동으로 반영됩니다.</p>

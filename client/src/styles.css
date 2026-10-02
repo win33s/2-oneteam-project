@@ -851,3 +851,8 @@ html[data-scrolled] .topbar { box-shadow: 0 1px 0 var(--line); }
 .tone-legend li { display: flex; align-items: center; gap: 7px; }
 .tone-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
 @media (prefers-reduced-motion: reduce) { .row.rv-in .card .card-dot { animation: none; } }
+
+/* 금액 입력: 오른쪽에 "원" 표시 */
+.won-input { position: relative; display: block; }
+.won-input input { padding-right: 34px; font-variant-numeric: tabular-nums; }
+.won-input i { position: absolute; right: 13px; top: 50%; translate: 0 -50%; font-style: normal; font-weight: 400; color: var(--ink-3); pointer-events: none; }

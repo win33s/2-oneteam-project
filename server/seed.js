@@ -13,31 +13,20 @@ const DEPARTMENTS = [
   { id: "d6", name: "품질보증팀", group: "CPO" },
 ];
 
-// [이름, 직급, 식이 제한, 음주, 선호 카테고리, 메모]
-const PEOPLE = {
-  d1: [
-    ["김하늘", "사원", [], "조금", ["activity", "culture"], "조직문화활동 기획 담당 (입사 1년차)"],
-    ["박정우", "팀장", [], "좋아함", ["restaurant"], "좌식보다 테이블석 선호"],
-    ["이서연", "책임", ["해산물 불가"], "조금", ["culture", "cafe"], ""],
-    ["최민준", "책임", [], "좋아함", ["restaurant", "activity"], ""],
-    ["정유진", "선임", ["채식"], "안 마심", ["culture", "cafe"], "채식 메뉴가 있으면 좋음"],
-    ["강도현", "선임", [], "조금", ["activity"], "몸 쓰는 활동 선호"],
-    ["윤지호", "선임", [], "안 마심", ["activity", "culture"], "자차 출퇴근이라 음주 어려움"],
-    ["한소희", "선임", ["해산물 불가"], "조금", ["restaurant", "cafe"], ""],
-    ["오세훈", "사원", [], "좋아함", ["activity", "restaurant"], ""],
-    ["임채원", "사원", [], "조금", ["culture", "stay"], ""],
-    ["서준영", "사원", ["매운 음식 불가"], "조금", ["activity"], ""],
-    ["배수아", "사원", [], "안 마심", ["cafe", "culture"], ""],
-  ],
-  d2: [["조현우", "선임", [], "조금", [], "조직문화활동 기획 담당"], ["문가영", "팀장", [], "조금", [], ""], ["신동혁", "책임", [], "좋아함", [], ""], ["류하린", "사원", [], "조금", [], ""]],
-  d3: [["남궁민", "사원", [], "조금", [], "조직문화활동 기획 담당"], ["홍석진", "팀장", [], "좋아함", [], ""], ["전소미", "선임", [], "안 마심", [], ""], ["표지훈", "사원", [], "조금", [], ""]],
-  d4: [["안예린", "선임", [], "조금", [], "조직문화활동 기획 담당"], ["황보석", "팀장", [], "조금", [], ""], ["유태오", "책임", [], "좋아함", [], ""], ["진세연", "사원", [], "안 마심", [], ""]],
-  d5: [["노은채", "사원", [], "조금", [], "조직문화활동 기획 담당"], ["길상우", "팀장", [], "좋아함", [], ""], ["탁재훈", "선임", [], "조금", [], ""], ["소유나", "사원", [], "조금", [], ""]],
-  d6: [["여진구", "선임", [], "조금", [], "조직문화활동 기획 담당"], ["봉태규", "팀장", [], "조금", [], ""], ["채수빈", "책임", [], "안 마심", [], ""], ["금보라", "사원", [], "조금", [], ""]],
-};
+// 부서원 명단. 어느 그룹·팀으로 로그인하든 같은 여섯 명이 보이도록 모든 팀에 똑같이 넣는다.
+// [이름, 직급, 식이 제한, 음주, 선호 카테고리] 식이·음주·선호는 추천 근거를 보여 주기 위한 예시 값이다.
+const ROSTER = [
+  ["박시진", "사원", [], "조금", ["activity", "culture"]],
+  ["문승진", "팀장", [], "좋아함", ["restaurant"]],
+  ["추헌호", "사원", ["해산물 불가"], "조금", ["restaurant", "activity"]],
+  ["최석준", "사원", [], "좋아함", ["activity"]],
+  ["김지우", "사원", ["채식"], "안 마심", ["culture", "cafe"]],
+  ["김기훈", "사원", [], "안 마심", ["activity", "culture"]],
+];
+const PEOPLE = Object.fromEntries(DEPARTMENTS.map((d) => [d.id, ROSTER]));
 
 // 알레르기는 직접 입력 항목이라 예시로 두 명만 넣어 둔다
-const ALLERGY = { 최민준: "땅콩", 임채원: "갑각류" };
+const ALLERGY = { 최석준: "땅콩" };
 
 const ALL = ["spring", "summer", "autumn", "winter"];
 // f: veg(채식 가능) seafood(해산물 위주) alcohol(술 위주) spicy(매운 메뉴 위주) room(단체석)
@@ -112,7 +101,7 @@ export function buildSeed() {
 
   const employees = [];
   for (const dept of DEPARTMENTS) {
-    PEOPLE[dept.id].forEach(([name, title, diet, alcohol, likes, note], i) => {
+    PEOPLE[dept.id].forEach(([name, title, diet, alcohol, likes], i) => {
       const num = Number(dept.id.slice(1)) * 100 + i + 1;
       employees.push({
         id: `e${num}`,
@@ -151,7 +140,7 @@ export function buildSeed() {
         venue = pick(r, pool);
       }
       const members = byDept(dept.id);
-      const headcount = dept.id === MY_DEPT ? 9 + Math.floor(r() * 4) : 8 + Math.floor(r() * 10);
+      const headcount = members.length - (r() < 0.3 ? 1 : 0);
       const amount = Math.round((venue.price * headcount * (0.9 + r() * 0.25)) / 100) * 100;
       const [accountName, accountCode] = accountFor(venue, r);
       const docNo = `EX${base.getFullYear()}${pad(m)}-${seq++}`;
@@ -193,7 +182,7 @@ export function buildSeed() {
         draftDate: ymd(d),
         useDate: ymd(d),
         dept: dept.name,
-        drafter: byDept(dept.id)[1 + Math.floor(r() * 3)].name,
+        drafter: byDept(dept.id)[2 + Math.floor(r() * 3)].name,
         accountName,
         accountCode,
         budgetSource: "부서 공통 예산",

@@ -67,7 +67,7 @@ export default function Login({ onDone }) {
             <h1>로그인</h1>
             <p className="muted">사번과 이름, 비밀번호를 입력해 주세요.</p>
             <label>사번<input value={form.empNo} onChange={set("empNo")} inputMode="numeric" placeholder="예) 20260001" autoFocus required /></label>
-            <label>이름<input value={form.name} onChange={set("name")} placeholder="예) 김하늘" required /></label>
+            <label>이름<input value={form.name} onChange={set("name")} placeholder="예) 박시진" required /></label>
             <label>비밀번호<input type="password" value={form.password} onChange={set("password")} placeholder="4자 이상" autoComplete="off" required /></label>
             {error && <p className="err">{error}</p>}
             <button className="btn big" disabled={busy}>{busy ? "확인 중…" : "다음"}</button>

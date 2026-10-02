@@ -114,7 +114,7 @@ export function homeRows(db, myDeptId) {
   const season = seasonOf(today());
   const sName = seasonName(season);
   const weather = weekWeather();
-  const members = db.employees.filter((e) => e.deptId === myDeptId);
+  const members = db.employees.filter((e) => e.deptId === myDeptId && !e.guest);
   const fansOf = (c) => members.filter((m) => m.prefs.likes.includes(c.category)).length;
   const byRating = (a, b) => (b.otherRating ?? 0) - (a.otherRating ?? 0) || b.reviewCount - a.reviewCount;
   const visited = cards.filter((c) => !c.brandNew);

@@ -29,7 +29,7 @@ export function apiRouter({ crawl, syncOnPoll }) {
     if (!String(name || "").trim()) return res.status(400).json({ error: "이름을 입력해 주세요" });
     if (String(password || "").length < 4) return res.status(400).json({ error: "비밀번호는 4자 이상 입력해 주세요" });
     const db = getDb();
-    res.json({ ok: true, departments: db.departments, known: db.employees.find((e) => e.empNo === String(empNo))?.deptId || null });
+    res.json({ ok: true, departments: db.departments, known: db.employees.find((e) => e.guest && e.empNo === String(empNo))?.deptId || null });
   });
 
   // 2단계: 소속 그룹·팀을 고르면 그 팀의 구성원으로 들어간다. 같은 이름이 있으면 그 사람으로, 없으면 새로 등록한다.
@@ -39,15 +39,19 @@ export function apiRouter({ crawl, syncOnPoll }) {
     const name = String(req.body.name || "").trim();
     const dept = db.departments.find((d) => d.id === req.body.deptId);
     if (!empNo || !name || !dept) return res.status(400).json({ error: "사번, 이름, 소속 팀이 필요합니다" });
-    let emp = db.employees.find((e) => e.empNo === empNo) || db.employees.find((e) => e.deptId === dept.id && e.name === name && !e.empNo);
+    // 명단에 있는 이름이면 그 팀의 그 사람으로 들어간다
+    let emp = db.employees.find((e) => !e.guest && e.deptId === dept.id && e.name === name);
     if (emp) {
-      emp.empNo = empNo;
-      emp.name = name;
-      emp.deptId = dept.id;
       emp.isPlanner = true;
     } else {
-      emp = { id: `u${empNo}`, empNo, name, title: "사원", deptId: dept.id, email: `user${empNo}@demo-corp.example`, isPlanner: true, prefs: { diet: [], alcohol: "조금", likes: [], allergy: "", dietEtc: "" } };
-      db.employees.push(emp);
+      // 명단에 없는 이름은 손님 계정: 기획·메일은 쓸 수 있지만 부서원 목록에는 나오지 않는다
+      emp = db.employees.find((e) => e.guest && e.empNo === empNo);
+      if (!emp) {
+        emp = { id: `u${empNo}`, guest: true, empNo, title: "사원", email: `user${empNo}@demo-corp.example`, isPlanner: true, prefs: { diet: [], alcohol: "조금", likes: [], allergy: "", dietEtc: "" } };
+        db.employees.push(emp);
+      }
+      emp.name = name;
+      emp.deptId = dept.id;
     }
     log("로그인", `${dept.name} ${name} 님 접속`);
     save();
@@ -61,7 +65,7 @@ export function apiRouter({ crawl, syncOnPoll }) {
       me,
       dept: db.departments.find((d) => d.id === me.deptId),
       departments: db.departments,
-      employees: db.employees,
+      employees: db.employees.filter((e) => !e.guest),
       categories: CATEGORY_LABEL,
       llmEnabled,
       today: today(),
@@ -348,7 +352,7 @@ export function apiRouter({ crawl, syncOnPoll }) {
     const db = getDb();
     const a = db.activities.find((x) => x.id === req.params.id);
     if (!a) return notFound(res, "활동 기록");
-    if (!a.participantIds.length) a.participantIds = db.employees.filter((e) => e.deptId === a.deptId).map((e) => e.id);
+    if (!a.participantIds.length) a.participantIds = db.employees.filter((e) => e.deptId === a.deptId && !e.guest).map((e) => e.id);
     sendReviewForm(db, a);
     save();
     res.json(expandActivity(db, a, who(req).deptId));

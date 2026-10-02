@@ -55,7 +55,7 @@ export function parseRequestWithLlm(text, todayStr) {
 export function summarizeRecommendations({ members, date, candidates }) {
   return ask({
     system:
-      "너는 사내 조직문화활동 기획을 처음 맡은 신입 담당자를 돕는 에이전트다. 주어진 추천 후보와 근거 데이터만 사용해 한국어로 3~4문장의 조언을 써라. 가장 권하는 곳 하나와 그 이유, 주의할 점 하나, 같은 곳이 반복되면 대안 하나를 말한다. 목록이나 머리말 없이 문장만 쓴다. 데이터에 없는 사실은 지어내지 않는다.",
+      "너는 사내 조직문화활동 기획을 처음 맡은 담당자를 돕는 에이전트다. 주어진 추천 후보와 근거 데이터만 사용해 한국어로 3~4문장의 조언을 써라. 가장 권하는 곳 하나와 그 이유, 주의할 점 하나, 같은 곳이 반복되면 대안 하나를 말한다. 목록이나 머리말 없이 문장만 쓴다. 데이터에 없는 사실은 지어내지 않는다.",
     user: JSON.stringify({ date, memberCount: members.length, preferences: members.map((m) => m.prefs), candidates }),
   });
 }
