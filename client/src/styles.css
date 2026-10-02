@@ -611,8 +611,8 @@ button.photo:hover { transform: translateY(-5px) rotate(-1deg); box-shadow: var(
 .photo-zoom figcaption { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 6px 2px; font-size: 14px; } .photo-zoom figcaption b { color: var(--red); }
 .photo-nav { margin-left: auto; display: flex; gap: 6px; }
 
-/* ---- 24단 햄버거 스택 ---- */
-.stack-layer { animation-delay: calc(var(--i) * 55ms + 150ms); }
+/* ---- 10단 칩 스택 ---- */
+.stack-layer { animation-delay: calc(var(--i) * 90ms + 150ms); }
 .login-brand .stack-layer rect:first-of-type { stroke: none; }
 .login-stack { width: min(210px, 52%); }
 .login-buddy { right: 7%; top: 8%; bottom: auto; width: 84px; }
@@ -770,3 +770,84 @@ tbody td:first-child { border-radius: 10px 0 0 10px; } tbody td:last-child { bor
 .hero-wafer { z-index: 0; pointer-events: none; } .hero-buddy { pointer-events: none; }
 .cal-cell small { font-size: 10px; letter-spacing: -.03em; }
 .rv.rv-in { transition: opacity .45s ease, transform .6s cubic-bezier(.2, .8, .2, 1); }
+
+/* =====================================================================
+   v5: 그라데이션 없는 평면 디자인
+   색이 번지는 배경, 빛나는 그림자, 글자 그라데이션을 모두 단색으로 바꾼다.
+   ===================================================================== */
+:root {
+  --shadow-sm: 0 1px 2px rgba(42, 33, 28, .07), 0 2px 6px rgba(42, 33, 28, .05);
+  --shadow-md: 0 2px 4px rgba(42, 33, 28, .06), 0 10px 22px -10px rgba(42, 33, 28, .22);
+  --shadow-lg: 0 4px 8px rgba(42, 33, 28, .07), 0 22px 40px -18px rgba(42, 33, 28, .3);
+}
+body { background: var(--paper); }
+.scroll-progress { background: var(--red); }
+.brand-mark { background: none; -webkit-background-clip: border-box; background-clip: border-box; color: var(--red); }
+.topbar nav a.active::after { background: var(--red); }
+html[data-scrolled] .topbar { box-shadow: 0 1px 0 var(--line); }
+.avatar { background: var(--orange); }
+
+.btn, .btn:hover:not(:disabled) { background: var(--red); box-shadow: none; filter: none; }
+.btn:hover:not(:disabled) { background: var(--red-deep); }
+.btn:active:not(:disabled) { background: #9c001d; box-shadow: none; }
+.btn.outline, .btn.outline:hover:not(:disabled) { box-shadow: none; }
+.btn.outline { background: var(--fill-2); } .btn.outline:hover:not(:disabled) { background: #ffe6d0; }
+.ask button { background: var(--red); } .ask button:hover { background: var(--red-deep); filter: none; }
+.chip.on, .filterbar .chip.on, .examples .chip.on { background: var(--orange); box-shadow: none; }
+.chip:hover { box-shadow: none; }
+.row-ctrl > button:hover { box-shadow: none; }
+
+.bar i, .scorebar i { background: var(--orange); } .tally li.lead .bar i { background: var(--red); }
+.mail-progress i { background: var(--red); }
+.confirmed-line { background: var(--red); box-shadow: none; }
+.next.hot { background: var(--red); }
+.advice { background: #fff3e2; }
+.post-list button.on { background: #ffe9d2; }
+.stepper li.now { box-shadow: none; }
+.photo-cap { background: rgba(42, 33, 28, .55); padding: 6px 10px; }
+
+/* 카드 그림: 반짝임과 점무늬를 뺀다 */
+.card-art::before, .card-art::after, .venue-hero::before, .rec-art::before, .hero-pick::before { display: none; }
+.card-emoji, .hero-pick-emoji, .venue-emoji, .photo-who { filter: none; }
+.hero-buddy, .login-stack, .login-buddy { filter: none; }
+
+/* 로그인 왼쪽 면: 단색 빨강 */
+.login-brand { background: var(--red); }
+.login-brand::before, .login-brand::after { display: none; }
+.login-logo::after { background: #fff; }
+.login-full b { color: #fff; }
+.login-brand .stack-layer > rect:first-of-type { stroke: #fff; stroke-width: 2; }
+.login-brand .chip-art ellipse:first-child { opacity: .18; }
+
+/* =====================================================================
+   v6: 추천 카드 = 정사각형 글 블록 + 오른쪽 위 색 뱃지
+   뱃지 색: 빨강 강력 추천 / 노랑 자주 간 곳 / 초록 새로운 곳. 뱃지 안에 장소 아이콘.
+   ===================================================================== */
+.row-track { padding-top: 22px; gap: 22px; }
+.card { flex: 0 0 236px; aspect-ratio: 1 / 1; position: relative; overflow: visible; border-radius: 22px; background: #fff; }
+.card-body { height: 100%; padding: 18px 18px 16px; display: flex; flex-direction: column; }
+.card-tags { min-height: 26px; display: flex; flex-wrap: wrap; gap: 5px; padding-right: 52px; margin-bottom: 10px; }
+.card-badge, .card-repeat { position: static; font-size: 11px; font-weight: 700; border-radius: 7px; padding: 3px 8px; box-shadow: none; }
+.card-badge { background: var(--fill); color: var(--ink-2); }
+.card-repeat { background: var(--ink); color: #fff; }
+.card-body h3 { font-size: 20px; line-height: 1.25; margin: 4px 0 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.card-foot { margin-top: auto; }
+.card-reason { margin: 8px 0 0; }
+
+.card-dot {
+  position: absolute; top: -14px; right: -10px; z-index: 2; width: 68px; height: 68px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 34px; line-height: 1; background: var(--fill-2); rotate: 8deg;
+  box-shadow: 0 6px 12px -6px rgba(42, 33, 28, .45); transition: transform .4s var(--spring), rotate .4s var(--spring);
+}
+.card.tone-hot .card-dot, .tone-dot.tone-hot { background: var(--red); }
+.card.tone-often .card-dot, .tone-dot.tone-often { background: var(--amber); }
+.card.tone-new .card-dot, .tone-dot.tone-new { background: var(--ok); }
+.card:hover .card-dot { transform: scale(1.18); rotate: -8deg; }
+.card:active .card-dot { transform: scale(.94); }
+.row.rv-in .card .card-dot { animation: dotIn .6s var(--spring) backwards; animation-delay: calc(var(--i, 0) * 60ms + 260ms); }
+@keyframes dotIn { from { transform: scale(0) rotate(-60deg); } }
+
+.tone-legend { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; padding: 10px clamp(16px, 4vw, 48px) 0; font-size: 13px; color: var(--ink-2); }
+.tone-legend li { display: flex; align-items: center; gap: 7px; }
+.tone-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+@media (prefers-reduced-motion: reduce) { .row.rv-in .card .card-dot { animation: none; } }

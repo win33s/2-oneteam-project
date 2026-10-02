@@ -378,7 +378,7 @@ function VenuePicker({ plan, sendMail }) {
       </div>
       {preferred && preferred.visitsMine >= 2 && (
         <div className="callout warn">
-          처음에 고른 장소(<b>{preferred.name}</b>)는 우리 부서가 이미 {preferred.visitsMine}번 다녀왔습니다. 아래에서 아래 “완전히 새로운 제안”도 확인해 보세요.
+          처음에 고른 장소(<b>{preferred.name}</b>)는 우리 부서가 이미 {preferred.visitsMine}번 다녀왔습니다. 아래에서 아래 “새로운 제안”도 확인해 보세요.
         </div>
       )}
       <ul className="rec-list">
@@ -420,7 +420,7 @@ function VenuePicker({ plan, sendMail }) {
 
       {fresh.length > 0 && (
         <>
-          <h2 className="sub-h">완전히 새로운 제안 <span className="muted">아직 어느 부서도 가 보지 않은 곳 · 날씨와 취향 기준</span></h2>
+          <h2 className="sub-h">새로운 제안 <span className="muted">아직 안 가 봤거나 후기가 10건 미만인 덜 알려진 곳 · 날씨와 취향 기준</span></h2>
           <ul className="fresh-list">
             {fresh.map((v) => (
               <li key={v.id} className="fresh">

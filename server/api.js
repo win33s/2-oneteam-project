@@ -426,12 +426,12 @@ function parseByRules(text) {
 }
 
 function ruleAdvice(recs, fresh) {
-  if (!recs.length) return fresh.length ? `이 조건으로 다녀온 기록은 없습니다. 대신 완전히 새로운 ${fresh[0].name}을(를) 살펴보세요.` : "조건에 맞는 곳을 찾지 못했습니다. 유형이나 예산 조건을 넓혀 보세요.";
+  if (!recs.length) return fresh.length ? `이 조건으로 다녀온 기록은 없습니다. 대신 아직 덜 알려진 ${fresh[0].name}을(를) 살펴보세요.` : "조건에 맞는 곳을 찾지 못했습니다. 유형이나 예산 조건을 넓혀 보세요.";
   const [top] = recs;
   const good = top.reasons.filter((r) => r.tone === "good").slice(0, 2).map((r) => r.text).join(", ");
   const warn = top.reasons.find((r) => r.tone === "warn");
   let text = `가장 권하는 곳은 ${top.name}입니다.${good ? ` 근거: ${good}.` : ""}`;
   if (warn) text += ` 확인할 점: ${warn.text}.`;
-  if (fresh[0]) text += ` 늘 가던 곳이 아닌 새로운 것을 원하면 아직 아무 부서도 안 가 본 ${fresh[0].name}도 있습니다.`;
+  if (fresh[0]) text += ` 늘 가던 곳이 아닌 새로운 것을 원하면 아직 덜 알려진 ${fresh[0].name}도 있습니다.`;
   return text;
 }

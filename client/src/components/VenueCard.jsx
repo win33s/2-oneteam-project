@@ -6,7 +6,8 @@ import { won } from "../api.js";
 export const artStyle = (hue) => {
   const h = 350 + (((hue % 360) + 360) % 360) * (55 / 360);
   return {
-    background: `radial-gradient(120% 90% at 85% 10%, hsl(${h + 22} 100% 86%) 0%, transparent 60%), linear-gradient(140deg, hsl(${h + 12} 96% 74%), hsl(${h} 88% 60%))`,
+    // 그라데이션 없이 한 가지 색으로만 칠한다
+    background: `hsl(${h + 8} 92% 80%)`,
   };
 };
 
@@ -15,22 +16,34 @@ export function Stars({ value }) {
   return <span className="stars">★ {value.toFixed(1)}</span>;
 }
 
+export const TONES = { hot: "강력 추천", often: "자주 간 곳", new: "새로운 곳" };
+
+export function ToneLegend() {
+  return (
+    <ul className="tone-legend">
+      {Object.entries(TONES).map(([tone, label]) => <li key={tone}><i className={`tone-dot tone-${tone}`} />{label}</li>)}
+    </ul>
+  );
+}
+
 export function VenueCard({ v, i = 0 }) {
   return (
-    <Link to={`/venue/${v.id}`} className="card" style={{ "--i": Math.min(i, 8) }}>
-      <div className="card-art" style={artStyle(v.hue)}>
-        <span className="card-emoji">{v.emoji}</span>
-        {v.badge && <span className="card-badge">{v.badge}</span>}
-        {v.visitsMine >= 2 && <span className="card-repeat">우리 부서 {v.visitsMine}회</span>}
-      </div>
+    <Link to={`/venue/${v.id}`} className={`card tone-${v.tone || "plain"}`} style={{ "--i": Math.min(i, 8) }}>
+      <span className="card-dot" title={TONES[v.tone] || ""} aria-label={TONES[v.tone] || undefined}>{v.emoji}</span>
       <div className="card-body">
+        <div className="card-tags">
+          {v.badge && <span className="card-badge">{v.badge}</span>}
+          {v.visitsMine >= 2 && <span className="card-repeat">우리 부서 {v.visitsMine}회</span>}
+        </div>
         <div className="card-kicker">{v.sub} · {v.area}</div>
         <h3>{v.name}</h3>
-        <div className="card-meta">
-          <Stars value={v.myRating ?? v.otherRating ?? v.rating} />
-          <span>1인 {won(v.avgPerHead)}</span>
+        <div className="card-foot">
+          <div className="card-meta">
+            <Stars value={v.myRating ?? v.otherRating ?? v.rating} />
+            <span>1인 {won(v.avgPerHead)}</span>
+          </div>
+          {v.reason && <p className="card-reason">{v.reason}</p>}
         </div>
-        {v.reason && <p className="card-reason">{v.reason}</p>}
       </div>
     </Link>
   );

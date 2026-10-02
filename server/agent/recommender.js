@@ -12,6 +12,12 @@ export const CATEGORY_LABEL = {
   cafe: "카페",
 };
 
+// 후기가 이 수보다 적으면 "덜 알려진 곳"으로 보고 새로운 제안에 넣는다
+const FEW_REVIEWS = 10;
+
+const HOT_RATING = 4.4;
+const OFTEN_VISITS = 4;
+
 const avg = (arr) => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null);
 const round1 = (n) => (n == null ? null : Math.round(n * 10) / 10);
 const seasonName = (s) => SEASON_LABEL[s].split(" · ")[0];
@@ -44,8 +50,22 @@ export function venueStats(db, myDeptId) {
   return stats;
 }
 
+/**
+ * 카드 뱃지 색의 의미.
+ * new(초록): 아직 어느 부서도 안 가 본 곳 / hot(빨강): 후기가 충분하고 평점이 높아 강력 추천 /
+ * often(노랑): 여러 번 다녀간 곳 / plain: 그 밖
+ */
+function toneOf(s) {
+  if (s.visitsAll === 0) return "new";
+  const rating = avg(s.otherRatings.length ? s.otherRatings : s.ratings);
+  if (rating >= HOT_RATING && s.ratings.length >= FEW_REVIEWS) return "hot";
+  if (s.visitsAll >= OFTEN_VISITS || s.visitsMine >= 2) return "often";
+  return "plain";
+}
+
 export function venueCard(v, s, season = seasonOf(today())) {
   return {
+    tone: toneOf(s),
     id: v.id,
     name: v.name,
     category: v.category,
@@ -134,11 +154,15 @@ export function homeRows(db, myDeptId) {
     },
     {
       key: "new",
-      title: "아직 아무 부서도 안 가 본 새로운 곳",
-      hint: `${weather.label} · 날씨와 우리 부서 취향으로 골랐습니다`,
-      items: cards.filter((c) => c.brandNew && c.seasons.includes(season))
+      title: "아직 덜 알려진 새로운 곳",
+      hint: `후기 ${FEW_REVIEWS}건 미만인 곳 · ${weather.label} · 날씨와 우리 부서 취향으로 골랐습니다`,
+      items: cards.filter((c) => c.reviewCount < FEW_REVIEWS && c.visitsMine === 0 && c.seasons.includes(season))
         .sort((a, b) => (weather.outdoorOk ? Number(b.outdoor) - Number(a.outdoor) : Number(a.outdoor) - Number(b.outdoor)) || fansOf(b) - fansOf(a))
-        .map((c) => ({ ...c, badge: "완전히 새로운 곳", reason: c.outdoor && weather.outdoorOk ? "이번 주 맑음, 야외에서 새롭게!" : !c.outdoor && !weather.outdoorOk ? "궂은 날씨엔 실내에서 새롭게!" : fansOf(c) ? `우리 부서 ${fansOf(c)}명 취향 저격` : "우리가 첫 방문 부서가 될 곳" })),
+        .map((c) => ({
+          ...c,
+          badge: c.brandNew ? "아무도 안 가 본 곳" : `후기 ${c.reviewCount}건뿐`,
+          reason: c.outdoor && weather.outdoorOk ? "이번 주 맑음, 야외에서 새롭게!" : !c.outdoor && !weather.outdoorOk ? "궂은 날씨엔 실내에서 새롭게!" : fansOf(c) ? `우리 부서 ${fansOf(c)}명 취향 저격` : c.brandNew ? "우리가 첫 방문 부서가 될 곳" : "아는 사람만 아는 곳",
+        })),
     },
   ];
   for (const [cat, label] of Object.entries(CATEGORY_LABEL)) {
@@ -226,9 +250,19 @@ export function recommendVenues(db, { memberIds = [], category, budgetPerHead, d
     const card = venueCard(v, stats.get(v.id), season);
     const f = fit(v, card);
 
-    if (card.brandNew) {
+    // 새로운 제안: 아예 안 가 본 곳뿐 아니라, 후기가 아직 적어 덜 알려진 곳도 함께 모은다
+    if (card.reviewCount < FEW_REVIEWS) {
       if (!v.seasons.includes(season)) continue;
-      fresh.push({ ...card, score: Math.max(0, Math.min(100, Math.round(60 + f.delta))), reasons: [{ tone: "good", text: "어느 부서도 아직 가 보지 않은 곳" }, ...f.reasons], bookingUrl: bookingUrl(v) });
+      const known = card.rating != null;
+      const lead = card.brandNew
+        ? [{ tone: "good", text: "어느 부서도 아직 가 보지 않은 곳" }]
+        : [
+            { tone: "good", text: `후기 ${card.reviewCount}건뿐인 덜 알려진 곳 (${card.deptCount}개 부서, ${card.visitsAll}회 방문)` },
+            ...(known ? [{ tone: card.rating >= 4 ? "good" : "info", text: `지금까지 평점 ${card.rating}점` }] : []),
+            { tone: "info", text: card.visitsMine ? `우리 부서 ${card.visitsMine}회 방문` : "우리 부서는 처음 가는 곳" },
+          ];
+      const score = 60 + f.delta + (known ? (card.rating - 3.5) * 10 : 0) - card.visitsMine * 6;
+      fresh.push({ ...card, score: Math.max(0, Math.min(100, Math.round(score))), reasons: [...lead, ...f.reasons], bookingUrl: bookingUrl(v) });
       continue;
     }
 

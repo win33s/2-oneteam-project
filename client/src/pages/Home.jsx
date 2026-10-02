@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { api, useApi, won } from "../api.js";
 import { useBoot } from "../App.jsx";
-import { Carousel, Stars, artStyle } from "../components/VenueCard.jsx";
+import { Carousel, Stars, artStyle, ToneLegend } from "../components/VenueCard.jsx";
 import { ChipBuddy, Wafer, ChipStack, CircuitLine } from "../components/ChipArt.jsx";
 
 const EXAMPLES = ["이번 달 3만원대 회식 장소 추천해 줘", "다음 달에 몸 쓰는 활동 하고 싶어", "MBTI 같은 문화 활동 2만원 이내"];
@@ -74,6 +74,7 @@ export default function Home() {
         ))}
       </div>
 
+      <ToneLegend />
       {!data && <div className="center-note">추천을 불러오는 중…</div>}
       {rows.map((r) => (
         <Carousel

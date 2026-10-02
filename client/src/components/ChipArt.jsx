@@ -42,94 +42,43 @@ export function ChipBuddy({ className = "", color = ORANGE }) {
   );
 }
 
-// 햄버거 속 재료. [이름, 높이, 색]
-const LETTUCE = ["lettuce", 5, "#7CC243"];
-const PATTY = ["patty", 8, "#6B3A1E"];
-const CHEESE = ["cheese", 4, "#FFC629"];
-const ONION = ["onion", 4, "#F4DDF2"];
-const TOMATO = ["tomato", 5, "#E53B2C"];
-// 빵 2단 + 속 22단 = 24단
-const FILLINGS = [LETTUCE, PATTY, CHEESE, ONION, TOMATO, LETTUCE, PATTY, CHEESE, ONION, TOMATO, LETTUCE, PATTY, CHEESE, ONION, TOMATO, LETTUCE, PATTY, CHEESE, ONION, TOMATO, LETTUCE, PATTY];
-const GAP = 1.2;
-const TOP_BUN = 44;
-const BOTTOM_BUN = 16;
+// 쌓인 칩의 층 색 (아래에서 위 순서). 회사 로고의 빨강과 주황만 번갈아 쓴다.
+const STACK_COLORS = [RED, ORANGE, RED, ORANGE, RED, ORANGE, RED, ORANGE, RED];
+const TOP_COLOR = ORANGE;
+const LAYER_H = 16;
+const LAYER_STEP = 20;
+const TOP_H = 40;
 
-function Filling({ kind, y, h, color }) {
-  if (kind === "lettuce") {
-    // 양상추: 양옆으로 삐져나온 물결 모양
-    let d = `M24 ${y + h}`;
-    for (let x = 24; x < 196; x += 12) d += ` q6 ${h * 0.9} 12 0`;
-    d += ` V${y + 1} H24 Z`;
-    return <path d={d} fill={color} />;
-  }
-  if (kind === "cheese")
-    return (
-      <g fill={color}>
-        <rect x="28" y={y} width="164" height={h} rx="1.5" />
-        <path d={`M52 ${y + h} l9 7 9 -7z M150 ${y + h} l8 6 8 -6z`} />
-      </g>
-    );
-  if (kind === "onion") return <rect x="36" y={y} width="148" height={h} rx={h / 2} fill={color} stroke="#C99BCB" strokeWidth="1" />;
-  if (kind === "tomato") return <rect x="34" y={y} width="152" height={h} rx={h / 2} fill={color} />;
-  return (
-    <g>
-      <rect x="30" y={y} width="160" height={h} rx="4" fill={color} />
-      <rect x="38" y={y + 1.5} width="144" height="1.6" rx=".8" fill="#fff" opacity=".18" />
-    </g>
-  );
-}
-
-/**
- * 24단으로 쌓아 붙인 메모리 칩. HBM의 Bonding을 햄버거 모양으로 그렸다.
- * 맨 위·맨 아래는 빵, 가운데 22단은 양상추·패티·치즈·양파·토마토가 차례로 쌓인다.
- */
+/** 칩을 층층이 쌓아 붙인 모습 (10단). HBM의 Bonding을 그대로 그렸다. */
 export function ChipStack({ className = "" }) {
-  let y = TOP_BUN + GAP;
-  const layers = FILLINGS.map(([kind, h, color]) => {
-    const layer = { kind, h, color, y };
-    y += h + GAP;
-    return layer;
-  });
-  const bottomY = y;
-  const height = bottomY + BOTTOM_BUN + 22;
-  const count = layers.length + 2;
+  const n = STACK_COLORS.length;
+  // i=0이 맨 아래 층
+  const layerY = (i) => TOP_H + 12 + (n - 1 - i) * LAYER_STEP;
+  const height = layerY(0) + LAYER_H + 26;
 
   return (
-    <svg className={`chip-art ${className}`} viewBox={`0 0 220 ${height}`} role="img" aria-label="햄버거처럼 24단으로 쌓인 메모리 칩">
-      <ellipse cx="110" cy={height - 9} rx="78" ry="8" fill="#000" opacity=".14" />
-
-      {/* 아래 빵 (1단) */}
-      <g className="stack-layer" style={{ "--i": 0 }}>
-        <path d={`M32 ${bottomY} H188 V${bottomY + 6} Q188 ${bottomY + BOTTOM_BUN} 172 ${bottomY + BOTTOM_BUN} H48 Q32 ${bottomY + BOTTOM_BUN} 32 ${bottomY + 6} Z`} fill="#E0963F" />
-        <rect x="40" y={bottomY + 2} width="140" height="2.4" rx="1.2" fill="#fff" opacity=".3" />
+    <svg className={`chip-art ${className}`} viewBox={`0 0 220 ${height}`} role="img" aria-label="층층이 쌓인 메모리 칩">
+      <ellipse cx="110" cy={height - 10} rx="78" ry="9" fill="#000" opacity=".12" />
+      {STACK_COLORS.map((color, i) => {
+        const y = layerY(i);
+        return (
+          <g key={i} className="stack-layer" style={{ "--i": i }}>
+            {/* 아래층과 이어 붙는 범프 */}
+            {i > 0 && [58, 84, 110, 136, 162].map((x) => <circle key={x} cx={x} cy={y + LAYER_H + 2} r="2.6" fill="#fff" opacity=".9" />)}
+            <rect x="34" y={y} width="152" height={LAYER_H} rx="7" fill={color} />
+            <rect x="42" y={y + 3} width="136" height="4" rx="2" fill="#fff" opacity=".28" />
+          </g>
+        );
+      })}
+      <g className="stack-layer" style={{ "--i": n }}>
+        {[58, 84, 110, 136, 162].map((x) => <circle key={x} cx={x} cy={TOP_H + 10} r="2.6" fill="#fff" opacity=".9" />)}
+        <rect x="34" y="8" width="152" height={TOP_H} rx="14" fill={TOP_COLOR} />
+        <rect x="42" y="13" width="136" height="6" rx="3" fill="#fff" opacity=".25" />
+        <Face cx={110} cy={29} scale={0.82} />
       </g>
-
-      {/* 속 22단: 아래에서부터 차례로 쌓인다 */}
-      {layers.map((l, i) => (
-        <g key={i} className="stack-layer" style={{ "--i": count - 2 - i }}>
-          <Filling {...l} />
-          {/* 층 사이를 잇는 범프 */}
-          {l.kind === "patty" && [62, 94, 126, 158].map((x) => <circle key={x} cx={x} cy={l.y + l.h / 2} r="1.5" fill="#fff" opacity=".75" />)}
-        </g>
-      ))}
-
-      {/* 위 빵 (24단) */}
-      <g className="stack-layer" style={{ "--i": count - 1 }}>
-        <path d={`M30 ${TOP_BUN} Q30 4 110 4 Q190 4 190 ${TOP_BUN} Z`} fill="#EDA550" />
-        <path d="M46 26 Q60 10 110 10" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" opacity=".35" />
-        <g fill="#FFF3D6">
-          <ellipse cx="74" cy="15" rx="4" ry="2" transform="rotate(-24 74 15)" />
-          <ellipse cx="110" cy="10" rx="4" ry="2" />
-          <ellipse cx="146" cy="15" rx="4" ry="2" transform="rotate(24 146 15)" />
-          <ellipse cx="54" cy="27" rx="4" ry="2" transform="rotate(-38 54 27)" />
-          <ellipse cx="166" cy="27" rx="4" ry="2" transform="rotate(38 166 27)" />
-        </g>
-        <Face cx={110} cy={30} scale={0.8} />
-      </g>
-
       <g className="chip-spark" fill="#fff">
-        <path d="M200 30 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z" />
-        <path d={`M16 ${bottomY - 40} l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z`} opacity=".8" />
+        <path d="M196 30 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z" />
+        <path d="M22 98 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" opacity=".8" />
       </g>
     </svg>
   );
