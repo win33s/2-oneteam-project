@@ -688,3 +688,85 @@ button.photo:hover { transform: translateY(-5px) rotate(-1deg); box-shadow: var(
 .cal-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
 .cal-cell { aspect-ratio: auto; min-height: 0; height: 58px; min-width: 0; width: 100%; overflow: hidden; }
 .cal-cell.out { display: grid; place-items: center; }
+
+/* =====================================================================
+   v4: 테두리 없는 디자인
+   구분은 테두리 대신 면 색과 그림자로 한다. 테두리는 표 머리줄, 타임라인 선,
+   키보드 포커스 표시처럼 없으면 기능이 사라지는 곳에만 남긴다.
+   ===================================================================== */
+:root { --fill: #f7efe8; --fill-2: #f1e6dc; }
+
+/* 버튼·칩 */
+.btn.outline, .btn.outline:hover:not(:disabled), .btn.outline:active:not(:disabled) { box-shadow: none; }
+.btn.outline { background: var(--fill-2); color: var(--ink); }
+.btn.outline:hover:not(:disabled) { background: #ffe6d0; color: var(--red); }
+.btn.outline:active:not(:disabled) { background: #ffd9b8; }
+.btn.outline:disabled { background: var(--fill); color: #b3a79e; }
+.ghost { border: 0; background: var(--fill); } .ghost:hover { background: #ffe6d0; }
+.chip { border: 0; box-shadow: none; background: var(--fill); } .chip:hover { box-shadow: none; background: #ffe6d0; }
+.chip.on { box-shadow: 0 8px 14px -8px rgba(244, 123, 32, .9); }
+.examples .chip, .filterbar .chip { background: #fff; box-shadow: var(--shadow-sm); } .filterbar .chip.on, .examples .chip.on { background: linear-gradient(180deg, #ff9238, var(--orange)); }
+.tag { border: 0; }
+
+/* 입력 */
+input:not([type="checkbox"]), select, textarea { border: 0; background: var(--fill); }
+input:not([type="checkbox"]):focus, select:focus, textarea:focus { background: #fff; box-shadow: 0 0 0 3px rgba(244, 123, 32, .35); }
+.ask input, .ask input:focus { background: none; box-shadow: none; }
+.mini-dd summary { border: 0; background: var(--fill); } .mini-dd[open] summary { background: #ffe6d0; }
+.mini-dd-free:first-of-type { border-top: 0; }
+
+/* 단계 표시 */
+.stepper li, .login-steps li { border: 0; background: var(--fill); }
+.stepper li.done, .login-steps li.done { background: #ffe9d2; color: #a94a00; }
+.stepper li.now, .login-steps li.now { background: var(--red); color: #fff; }
+.stepper b, .login-steps b { background: #fff; }
+
+/* 패널 안 구분선 */
+.panel-foot, .sub-h, .card-reason, .score-tip ul { border: 0; }
+.panel-foot { padding-top: 4px; } .sub-h { margin-top: 18px; padding-top: 0; }
+.card-reason { padding-top: 0; margin-top: 8px; }
+.callout, .callout.good, .callout.info, .callout.warn { border: 0; }
+.callout.ask { box-shadow: var(--shadow-md); background: #fff7ef; }
+.advice { border: 0; }
+.fresh { border: 0; background: var(--fill); } .fresh:hover { background: #fff; }
+.next.disabled { border: 0; background: var(--fill); }
+.rec { border: 0; box-shadow: var(--shadow-sm); }
+.evidence { background: var(--fill); }
+.person { border: 0; background: var(--fill); } .person.on { background: #ffe3c2; color: #8f4a00; }
+.org details { border: 0; padding: 6px 0; } .org-group h3 { border: 0; padding-bottom: 0; }
+.vote-list label { border: 0; background: var(--fill); } .vote-list label.on { background: #ffe3c2; }
+.plan-list li, .count-list li, .reviews li, .mail-list li { border: 0; }
+.reviews.grid li { border: 0; background: var(--fill); }
+.count-list li { padding: 8px 10px; border-radius: 10px; } .count-list li:nth-child(odd) { background: var(--fill); }
+.count-list li:has(.photo-link) { padding: 0; }
+.mail-list { background: none; box-shadow: none; display: flex; flex-direction: column; gap: 8px; overflow: visible; }
+.mail-list li { background: #fff; border-radius: 14px; box-shadow: var(--shadow-sm); overflow: hidden; }
+.mail-body pre { border: 0; background: var(--fill); }
+.poll-box { box-shadow: none; background: var(--fill); }
+.day-panel.empty { border: 0; background: var(--fill); }
+.login-brand ul, .login-brand li { border: 0; } .login-brand ul { margin-top: 6px; } .login-brand li { padding: 10px 0; }
+.log-drawer .ghost { background: rgba(255, 255, 255, .12); border: 0; }
+
+/* 표: 머리줄만 남기고 줄 사이 선은 뺀다 */
+th { border-bottom: 2px solid var(--orange); }
+td { border-bottom: 0; }
+tbody tr:nth-child(even) td { background: #fbf5ef; } tbody tr.mine td { background: #fff1dc; }
+tbody td:first-child { border-radius: 10px 0 0 10px; } tbody td:last-child { border-radius: 0 10px 10px 0; }
+.evidence tbody tr:nth-child(even) td { background: none; }
+
+/* 달력: 테두리 없이 면 색만. 고른 날은 진한 색으로 채운다 */
+.cal-cell.green, .cal-cell.yellow, .cal-cell.red, .cal-cell.wait { box-shadow: none; }
+.cal-cell.green { animation: glow2 2.4s ease-in-out infinite; }
+@keyframes glow2 { 0%, 100% { box-shadow: 0 0 0 0 rgba(31, 157, 99, 0); } 50% { box-shadow: 0 0 18px 3px rgba(31, 157, 99, .5); } }
+.cal-cell.focused { outline: 0; animation: none; color: #fff; transform: scale(1.08); box-shadow: 0 10px 18px -8px rgba(42, 33, 28, .55); }
+.cal-cell.focused.green { background: var(--ok); } .cal-cell.focused.yellow { background: var(--mid); } .cal-cell.focused.red { background: var(--no); } .cal-cell.focused.wait { background: var(--ink-2); }
+.cal-cell.focused .cal-check { background: #fff; color: var(--ink); } .cal-cell.focused .cal-star { color: #fff; }
+.cal-cell:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .cal-cell.green { animation: none; } }
+
+/* 겹침 방지: 달 사이 간격과 옆 패널 */
+.cal { gap: 28px 34px; }
+.cal-side { top: 76px; }
+.hero-wafer { z-index: 0; pointer-events: none; } .hero-buddy { pointer-events: none; }
+.cal-cell small { font-size: 10px; letter-spacing: -.03em; }
+.rv.rv-in { transition: opacity .45s ease, transform .6s cubic-bezier(.2, .8, .2, 1); }

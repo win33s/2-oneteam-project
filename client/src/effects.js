@@ -35,19 +35,22 @@ export function initEffects() {
   // 스크롤해서 화면에 들어오는 블록을 아래에서 떠오르게 한다
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
   const seen = new WeakSet();
+  const reveal = (el) => {
+    if (el.classList.contains("rv-in")) return;
+    io.unobserve(el);
+    el.classList.add("rv-in");
+    // 등장이 끝나면 클래스를 걷어 내 hover 등 원래 움직임과 겹치지 않게 한다
+    setTimeout(() => el.classList.remove("rv", "rv-in"), 1100);
+  };
   const io = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        const el = entry.target;
-        io.unobserve(el);
-        el.classList.add("rv-in");
-        // 등장이 끝나면 클래스를 걷어 내 hover 등 원래 움직임과 겹치지 않게 한다
-        setTimeout(() => el.classList.remove("rv", "rv-in"), 1100);
-      }
-    },
+    (entries) => entries.forEach((entry) => entry.isIntersecting && reveal(entry.target)),
     { rootMargin: "0px 0px -6% 0px", threshold: 0.04 }
   );
+  // 처음부터 화면 안에 있는 블록은 관찰자를 기다리지 않고 바로 띄운다 (늦게 나타나 비어 보이는 것 방지)
+  // 타이머를 쓰는 이유: 탭이 뒤에 있을 때는 requestAnimationFrame과 관찰자가 멈춰서 내용이 계속 가려질 수 있다
+  const revealIfVisible = (el) => setTimeout(() => {
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.96) reveal(el);
+  }, 40);
   const scan = (node) => {
     if (!(node instanceof Element)) return;
     const list = node.matches(REVEAL) ? [node] : [];
@@ -57,6 +60,7 @@ export function initEffects() {
       seen.add(el);
       el.classList.add("rv");
       io.observe(el);
+      revealIfVisible(el);
     }
   };
   new MutationObserver((muts) => muts.forEach((m) => m.addedNodes.forEach(scan))).observe(document.body, { childList: true, subtree: true });
