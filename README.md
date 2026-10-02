@@ -29,7 +29,7 @@ npm start
 
 Vercel에서는 서버가 요청 때만 잠깐 실행되므로, 데이터를 파일 대신 Upstash Redis에 저장합니다.
 
-1. Vercel 프로젝트 → Settings → Build and Deployment → **Root Directory**를 `agent`로 설정합니다.
+1. Vercel에서 **Add New → Project**로 이 저장소를 가져옵니다. 프로젝트가 저장소 최상위에 있으므로 Root Directory는 기본값 그대로 둡니다.
 2. Vercel 프로젝트 → **Storage → Create Database → Upstash (Redis)** 를 만들어 프로젝트에 연결합니다. 접속 정보(`KV_REST_API_URL`, `KV_REST_API_TOKEN` 또는 `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`)가 환경변수로 자동 등록됩니다.
 3. 다시 배포합니다 (Deployments → 최근 배포 → Redeploy, 또는 새로 푸시).
 
