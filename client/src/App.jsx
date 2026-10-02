@@ -1,7 +1,8 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { NavLink, Route, Routes, Link, useNavigate } from "react-router-dom";
 import { useApi, getSession, clearSession } from "./api.js";
 import Login from "./pages/Login.jsx";
+import Intro from "./pages/Intro.jsx";
 import AgentLog from "./components/AgentLog.jsx";
 import Home from "./pages/Home.jsx";
 import VenuePage from "./pages/VenuePage.jsx";
@@ -15,11 +16,23 @@ import ReviewForm from "./pages/ReviewForm.jsx";
 import Profile from "./pages/Profile.jsx";
 import GalleryPage from "./pages/GalleryPage.jsx";
 
+const INTRO_KEY = "hbm.intro";
+const introSeen = () => {
+  try {
+    return sessionStorage.getItem(INTRO_KEY) === "1" || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch { return false; }
+};
+const markIntroSeen = () => { try { sessionStorage.setItem(INTRO_KEY, "1"); } catch { /* 저장을 못 하면 다음 접속 때 다시 보여 준다 */ } };
+
 const BootContext = createContext(null);
 export const useBoot = () => useContext(BootContext);
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(() => Boolean(getSession()));
+  // 도입 화면은 로그인하지 않은 채 처음 접속했을 때 한 번만 보여 준다 (로그아웃 뒤에는 바로 로그인 화면)
+  const [intro, setIntro] = useState(() => !getSession() && !introSeen());
+  const endIntro = useCallback(() => { markIntroSeen(); setIntro(false); }, []);
+  if (!signedIn && intro) return <Intro onDone={endIntro} />;
   if (!signedIn) return <Login onDone={() => setSignedIn(true)} />;
   return <Shell onLogout={() => { clearSession(); setSignedIn(false); }} />;
 }
