@@ -610,3 +610,81 @@ button.photo:hover { transform: translateY(-5px) rotate(-1deg); box-shadow: var(
 .photo.big { border-radius: 14px; box-shadow: none; } .photo.big .photo-who { font-size: 130px; } .photo.big .photo-venue { font-size: 70px; }
 .photo-zoom figcaption { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 6px 2px; font-size: 14px; } .photo-zoom figcaption b { color: var(--red); }
 .photo-nav { margin-left: auto; display: flex; gap: 6px; }
+
+/* ---- 24단 햄버거 스택 ---- */
+.stack-layer { animation-delay: calc(var(--i) * 55ms + 150ms); }
+.login-brand .stack-layer rect:first-of-type { stroke: none; }
+.login-stack { width: min(210px, 52%); }
+.login-buddy { right: 7%; top: 8%; bottom: auto; width: 84px; }
+.foot-stack { width: 104px; }
+
+/* ---- 날짜 달력 ---- */
+:root { --ok: #1f9d63; --ok-bg: #e2f6ea; --mid: #c98500; --mid-bg: #fff3cf; --no: #d3122f; --no-bg: #ffe3e7; }
+.cal-legend { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; padding: 0; font-size: 13px; color: var(--ink-2); }
+.cal-legend li { display: flex; align-items: center; gap: 6px; }
+.dot { width: 12px; height: 12px; border-radius: 4px; display: inline-block; }
+.dot.green { background: var(--ok); } .dot.yellow { background: var(--amber); } .dot.red { background: var(--no); } .dot.wait { background: #d8cdc4; }
+.cal-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 22px; align-items: start; }
+@media (max-width: 900px) { .cal-layout { grid-template-columns: 1fr; } }
+.cal { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+.cal-month h3 { font-size: 19px; margin-bottom: 10px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.cal-dow { text-align: center; font-size: 12px; font-weight: 700; color: var(--ink-3); padding-bottom: 2px; } .cal-dow.sun { color: var(--no); } .cal-dow.sat { color: #3d6fd6; }
+.cal-cell {
+  position: relative; aspect-ratio: 1 / 1; min-height: 54px; border: 0; border-radius: 14px; padding: 6px 4px 4px; background: var(--paper); color: var(--ink);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; font: inherit; cursor: pointer;
+  transition: transform .25s var(--spring), box-shadow .25s, background .2s;
+}
+.cal-cell b { font-family: var(--display); font-weight: 400; font-size: 19px; line-height: 1; }
+.cal-cell small { font-size: 10.5px; font-weight: 600; opacity: .85; white-space: nowrap; }
+.cal-cell.out { color: #d9cfc6; background: none; cursor: default; font-family: var(--display); font-size: 17px; }
+.cal-cell.muted, .cal-cell:disabled { background: none; color: #cbbfb6; cursor: default; }
+.cal-cell.green { background: var(--ok-bg); color: #0f6a40; box-shadow: inset 0 0 0 1.5px rgba(31, 157, 99, .35); animation: glow 2.4s ease-in-out infinite; }
+.cal-cell.yellow { background: var(--mid-bg); color: #7d5400; box-shadow: inset 0 0 0 1.5px rgba(253, 181, 21, .55); }
+.cal-cell.red { background: var(--no-bg); color: #a50d24; box-shadow: inset 0 0 0 1.5px rgba(211, 18, 47, .3); }
+.cal-cell.wait { background: #f3ebe4; color: var(--ink-2); box-shadow: inset 0 0 0 1.5px var(--line); }
+@keyframes glow { 0%, 100% { box-shadow: inset 0 0 0 1.5px rgba(31, 157, 99, .35), 0 0 0 0 rgba(31, 157, 99, 0); } 50% { box-shadow: inset 0 0 0 1.5px rgba(31, 157, 99, .6), 0 0 16px 2px rgba(31, 157, 99, .42); } }
+.cal-cell:not(:disabled):not(.out):hover { transform: translateY(-3px) scale(1.05); z-index: 1; }
+.cal-cell:not(:disabled):active { transform: scale(.93); }
+.cal-cell.focused { outline: 3px solid var(--ink); outline-offset: 2px; transform: scale(1.06); z-index: 2; animation: none; }
+.cal-star { position: absolute; top: 3px; left: 5px; font-style: normal; font-size: 10px; color: var(--amber); text-shadow: 0 0 0 #a56a00; }
+.cal-check { position: absolute; top: 3px; right: 4px; width: 15px; height: 15px; border-radius: 50%; background: var(--ink); color: #fff; font-style: normal; font-size: 9px; display: grid; place-items: center; animation: pop .3s var(--spring); }
+.cal-side { display: flex; flex-direction: column; gap: 14px; position: sticky; top: 84px; }
+.day-panel { border-radius: 18px; padding: 18px; background: var(--paper); display: flex; flex-direction: column; gap: 10px; align-items: flex-start; animation: modalIn .35s var(--spring) both; }
+.day-panel.empty { animation: none; border: 1.5px dashed var(--line-strong); background: none; }
+.day-panel.green { background: var(--ok-bg); } .day-panel.yellow { background: var(--mid-bg); } .day-panel.red { background: var(--no-bg); }
+.day-panel h3 { font-size: 24px; } .day-panel p { margin: 0; } .day-panel .btn { align-self: stretch; margin-top: 4px; } .day-panel .bar { width: 100%; background: rgba(255, 255, 255, .7); margin: 0; }
+.day-count b { font-family: var(--display); font-weight: 400; font-size: 22px; }
+.tone-tag { font-size: 12px; font-weight: 700; border-radius: 8px; padding: 3px 10px; color: #fff; background: #b8aca3; }
+.tone-tag.green { background: var(--ok); } .tone-tag.yellow { background: var(--mid); } .tone-tag.red { background: var(--no); }
+.poll-box { border-radius: 18px; padding: 16px 18px; box-shadow: inset 0 0 0 1.5px var(--line); display: flex; flex-direction: column; gap: 8px; }
+.poll-box p { margin: 0; } .poll-box b { font-family: var(--display); font-weight: 400; font-size: 17px; }
+.confirm-modal { width: min(440px, 100%); } .confirm-modal h2 { font-size: 22px; line-height: 1.3; } .confirm-modal p { margin: 0; }
+@media (prefers-reduced-motion: reduce) { .cal-cell.green { animation: none; } }
+
+/* ---- 추천도와 말풍선 ---- */
+.scorebar { position: relative; cursor: help; padding: 6px 10px; margin: -6px -10px; border-radius: 12px; transition: background .2s; outline: none; flex: none; }
+.scorebar:hover, .scorebar:focus-visible { background: #fff1e4; }
+.score-label { font-size: 12px; font-weight: 700; color: var(--ink-3); }
+.scorebar b small { font-family: var(--body); font-size: 12px; font-weight: 600; color: var(--ink-3); margin-left: 1px; }
+.score-tip {
+  position: absolute; z-index: 25; right: 0; top: calc(100% + 8px); width: 300px; padding: 14px 16px; border-radius: 16px; background: #fff; box-shadow: var(--shadow-lg);
+  display: flex; flex-direction: column; gap: 8px; text-align: left; cursor: default;
+  opacity: 0; visibility: hidden; transform: translateY(-6px) scale(.97); transform-origin: top right; transition: opacity .2s, transform .28s var(--spring), visibility .2s;
+}
+.score-tip::before { content: ""; position: absolute; right: 26px; top: -6px; width: 12px; height: 12px; background: #fff; transform: rotate(45deg); border-radius: 2px; }
+.scorebar:hover .score-tip, .scorebar:focus .score-tip, .scorebar:focus-within .score-tip { opacity: 1; visibility: visible; transform: none; }
+.score-tip strong { font-family: var(--display); font-weight: 400; font-size: 18px; color: var(--red); } .score-tip strong small { font-family: var(--body); font-size: 12px; color: var(--ink-3); }
+.score-tip-desc { font-size: 12px; color: var(--ink-3); line-height: 1.5; }
+.score-tip ul { list-style: none; margin: 0; padding: 8px 0 0; border-top: 1px dashed var(--line); display: flex; flex-direction: column; gap: 5px; }
+.score-tip li { font-size: 13px; color: var(--ink-2); padding-left: 20px; position: relative; line-height: 1.4; }
+.score-tip li::before { content: "·"; position: absolute; left: 4px; font-weight: 700; }
+.score-tip li.good::before { content: "✓"; color: var(--ok); left: 2px; } .score-tip li.warn::before { content: "!"; color: var(--no); left: 6px; } .score-tip li.warn { color: #a50d24; }
+.rec { overflow: visible; position: relative; } .rec:hover, .rec:focus-within { z-index: 6; }
+.rec-art { border-radius: 16px 0 0 16px; overflow: hidden; }
+@media (max-width: 640px) { .rec-art { border-radius: 16px 16px 0 0; } .score-tip { width: min(300px, 80vw); } }
+/* 달력 칸은 칸 너비에 맞추고 높이만 고정한다 (좁은 화면에서 두 달이 겹치지 않게) */
+.cal { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.cal-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.cal-cell { aspect-ratio: auto; min-height: 0; height: 58px; min-width: 0; width: 100%; overflow: hidden; }
+.cal-cell.out { display: grid; place-items: center; }

@@ -4,6 +4,7 @@ import { api, useApi, won, dateLabel, addDaysStr } from "../api.js";
 import { useBoot } from "../App.jsx";
 import { artStyle, Stars } from "../components/VenueCard.jsx";
 import MailSendOverlay from "../components/MailSendOverlay.jsx";
+import DateCalendar, { CalLegend } from "../components/DateCalendar.jsx";
 
 const SLOTS = { dinner: "저녁", lunch: "점심", allday: "종일" };
 const STEPS = ["조건", "날짜", "장소", "확정·예약", "기록"];
@@ -191,91 +192,166 @@ function PlanFlow({ id }) {
   );
 }
 
-function ScoreBar({ value }) {
-  return <span className="scorebar" title="추천 점수"><span className="track"><i style={{ width: `${value}%` }} /></span><b>{value}</b></span>;
+/** 추천도 막대. 커서를 올리거나 눌러서 포커스를 주면 점수의 뜻과 추천 이유가 말풍선으로 나온다. */
+function ScoreBar({ value, reasons = [] }) {
+  return (
+    <span className="scorebar" tabIndex={0} aria-label={`추천도 ${value}점. 추천 이유 보기`}>
+      <span className="score-label">추천도</span>
+      <span className="track"><i style={{ width: `${value}%` }} /></span>
+      <b>{value}<small>점</small></b>
+      <span className="score-tip" role="tooltip">
+        <strong>추천도 {value}점 <small>/ 100점</small></strong>
+        <span className="score-tip-desc">퍼센트가 아니라 에이전트가 매긴 점수입니다. 이맘때 방문 횟수, 후기, 단체 사진, 날씨, 예산, 부서원 취향을 합쳤습니다.</span>
+        <ul>
+          {reasons.map((r, k) => <li key={k} className={r.tone}>{r.text}</li>)}
+        </ul>
+      </span>
+    </span>
+  );
+}
+
+const TONE_TEXT = { green: "가능", yellow: "애매", red: "어려움" };
+
+/** 확정하기 어려운 날짜를 고르면 한 번 더 묻는다 */
+function HardDateDialog({ day, detail, onConfirm, onCancel }) {
+  return (
+    <div className="mail-overlay" role="alertdialog" aria-modal="true" onClick={onCancel}>
+      <div className="mail-modal confirm-modal" onClick={(e) => e.stopPropagation()}>
+        <p className="eyebrow">{day.label}</p>
+        <h2>참여 불가능한 인원이 많은데 이 날로 확정할까요?</h2>
+        <p className="muted">{detail}</p>
+        <footer className="mail-modal-foot">
+          <button className="btn outline" onClick={onCancel}>취소</button>
+          <button className="btn" onClick={onConfirm}>그래도 확정</button>
+        </footer>
+      </div>
+    </div>
+  );
+}
+
+/** 달력 오른쪽: 고른 날짜의 사정과 "이 날로 확정" 버튼 */
+function DayPanel({ day, tone, children, onConfirm, busy }) {
+  if (!day) return <aside className="day-panel empty"><p className="muted">달력에서 날짜를 누르면 그날의 사정과 확정 버튼이 여기에 나옵니다.</p></aside>;
+  return (
+    <aside className={`day-panel ${tone}`}>
+      <span className={`tone-tag ${tone}`}>{TONE_TEXT[tone] || "대기"}</span>
+      <h3>{day.label}</h3>
+      {children}
+      <button className="btn" disabled={busy} onClick={onConfirm}>이 날로 확정</button>
+    </aside>
+  );
 }
 
 function DatePicker({ plan, onChange, sendMail }) {
-  const [picked, setPicked] = useState(() => new Set(plan.dateCandidates.slice(0, 3).map((c) => c.date)));
+  const days = plan.calendar || plan.dateCandidates.map((c) => ({ ...c, kind: "open", status: c.conflicts.length ? "yellow" : "green" }));
+  const stars = new Set(plan.dateCandidates.slice(0, 3).map((c) => c.date));
+  const [picked, setPicked] = useState(() => new Set(plan.dateCandidates.filter((c) => c.status !== "red").slice(0, 3).map((c) => c.date)));
+  const [focus, setFocus] = useState(null);
+  const [ask, setAsk] = useState(false);
   const [busy, setBusy] = useState(false);
-  const toggle = (d) => setPicked((prev) => { const n = new Set(prev); n.has(d) ? n.delete(d) : n.add(d); return n; });
-  const run = async (fn) => { setBusy(true); try { onChange(await fn()); } finally { setBusy(false); } };
+  const day = days.find((d) => d.date === focus);
+
+  const pick = (d) => {
+    setFocus(d.date);
+    // 투표 후보에는 과제 일정으로 막힌 날을 넣지 않는다
+    if (d.kind !== "open") return;
+    setPicked((prev) => { const n = new Set(prev); n.has(d.date) && focus === d.date ? n.delete(d.date) : n.add(d.date); return n; });
+  };
+  const confirm = async () => {
+    setAsk(false);
+    setBusy(true);
+    try { onChange(await api.post(`/plans/${plan.id}/date`, { date: day.date })); } finally { setBusy(false); }
+  };
 
   return (
     <section className="panel">
-      <h2>날짜 후보 <span className="muted">부서원 캘린더와 과제 일정을 확인했습니다</span></h2>
-      {plan.excludedPeriods?.length > 0 && (
-        <div className="callout info">
-          중요한 과제 일정과 겹치는 기간은 후보에서 자동으로 뺐습니다:{" "}
-          {plan.excludedPeriods.map((x, i) => <span key={i}><b>{x.label}</b> {x.title}{i < plan.excludedPeriods.length - 1 ? ", " : ""}</span>)}
-        </div>
-      )}
-      {!plan.dateCandidates.length && <p className="muted">해당 기간에 가능한 평일이 없습니다. 기간을 넓혀 주세요.</p>}
-      <ul className="date-list">
-        {plan.dateCandidates.map((c, i) => (
-          <li key={c.date} className={picked.has(c.date) ? "on" : ""}>
-            <label>
-              <input type="checkbox" checked={picked.has(c.date)} onChange={() => toggle(c.date)} />
-              <span className="rank">{i + 1}</span>
-              <span className="date-main">
-                <b>{c.label}</b>
-                <small>{c.available}/{c.total}명 참석 가능</small>
-              </span>
-            </label>
-            <ScoreBar value={c.score} />
+      <h2>날짜 고르기 <span className="muted">부서원 캘린더와 과제 일정을 달력에 표시했습니다</span></h2>
+      <CalLegend items={[["green", "전원 가능 (추천)"], ["yellow", "일부 불참·주의할 일정"], ["red", "불참 많음·중요 과제 일정"]]} />
+      <div className="cal-layout">
+        <DateCalendar
+          days={days}
+          onPick={pick}
+          cellOf={(d) => d.kind === "off"
+            ? { tone: "muted", sub: d.reason, disabled: true }
+            : { tone: d.status, sub: d.kind === "blocked" ? "과제 일정" : `${d.available}/${d.total}명`, picked: picked.has(d.date), focused: focus === d.date, star: stars.has(d.date) }}
+        />
+        <div className="cal-side">
+          <DayPanel day={day} tone={day?.status} busy={busy} onConfirm={() => (day.status === "red" ? setAsk(true) : confirm())}>
+            <p className="day-count"><b>{day?.available}</b>/{day?.total}명 참석 가능{day?.kind === "open" && <> · 점수 {day.score}</>}</p>
             <div className="notes">
-              {c.notes.map((n, k) => <span key={k} className={`note ${n.tone}`}>{n.text}</span>)}
-              {c.conflicts.map((x) => <span key={x.empId} className="note info">{x.name} {x.type}</span>)}
+              {day?.notes.map((n, k) => <span key={k} className={`note ${n.tone}`}>{n.text}</span>)}
+              {day?.conflicts.map((x) => <span key={x.empId} className="note info">{x.name} {x.type}</span>)}
             </div>
-            <button className="btn small outline" disabled={busy} onClick={() => run(() => api.post(`/plans/${plan.id}/date`, { date: c.date }))}>이 날로 확정</button>
-          </li>
-        ))}
-      </ul>
-      <div className="panel-foot">
-        <p className="muted small">후보가 여럿이면 투표로 정하세요. 선택한 {picked.size}개 날짜가 부서원 {plan.memberIds.length}명에게 메일로 발송됩니다.</p>
-        <button className="btn" disabled={busy || picked.size < 2} onClick={() => sendMail({
-          title: "날짜 투표 메일을 보내는 중",
-          subject: `[날짜 투표] ${plan.title} 가능한 날짜를 골라 주세요`,
-          run: () => api.post(`/plans/${plan.id}/poll`, { dates: [...picked] }),
-        })}>
-          선택한 후보로 투표 메일 보내기
-        </button>
+          </DayPanel>
+          <div className="poll-box">
+            <b>투표로 정하기</b>
+            <p className="muted small">달력에서 고른 {picked.size}개 날짜(✓)를 부서원 {plan.memberIds.length}명에게 메일로 보냅니다. 고른 날짜를 다시 누르면 빠집니다.</p>
+            <button className="btn outline" disabled={busy || picked.size < 2} onClick={() => sendMail({
+              title: "날짜 투표 메일을 보내는 중",
+              subject: `[날짜 투표] ${plan.title} 가능한 날짜를 골라 주세요`,
+              run: () => api.post(`/plans/${plan.id}/poll`, { dates: [...picked] }),
+            })}>고른 날짜로 투표 메일 보내기</button>
+          </div>
+        </div>
       </div>
+      {ask && <HardDateDialog day={day} onCancel={() => setAsk(false)} onConfirm={confirm}
+        detail={day.kind === "blocked" ? day.notes[0].text + "과 겹치는 날입니다." : `${day.total}명 중 ${day.conflicts.length}명이 참석하기 어렵습니다: ${day.conflicts.map((c) => `${c.name}(${c.type})`).join(", ")}`} />}
     </section>
   );
 }
 
+// 투표 결과로 칸 색을 정한다: 응답자 대부분이 가능하면 초록, 절반 안팎이면 노랑, 적으면 빨강
+function voteTone(count, voted) {
+  if (!voted) return "wait";
+  const ratio = count / voted;
+  return ratio >= 0.75 ? "green" : ratio >= 0.45 ? "yellow" : "red";
+}
+
 function PollPanel({ plan, onChange }) {
   const poll = plan.poll;
-  const max = Math.max(1, ...poll.tallies.map((t) => t.count));
-  const lead = [...poll.tallies].sort((a, b) => b.count - a.count)[0];
+  const tally = new Map(poll.tallies.map((t) => [t.date, t]));
+  const days = plan.calendar || poll.tallies.map((t) => ({ date: t.date, label: t.label, kind: "open" }));
+  const [focus, setFocus] = useState(null);
+  const [ask, setAsk] = useState(false);
+  const t = tally.get(focus);
+  const tone = t ? voteTone(t.count, poll.votedCount) : null;
   const refresh = async () => onChange(await api.get(`/plans/${plan.id}`));
+  const confirm = async () => { setAsk(false); onChange(await api.post(`/plans/${plan.id}/date`, { date: focus })); };
 
   return (
     <section className="panel">
       <h2>날짜 투표 <span className="live">실시간</span> <span className="muted">{poll.votedCount}/{poll.voterIds.length}명 응답</span></h2>
-      <ul className="tally">
-        {poll.tallies.map((t) => (
-          <li key={t.date} className={t.date === lead.date && t.count ? "lead" : ""}>
-            <div className="tally-top">
-              <b>{t.label}</b>
-              <span>{t.count}표</span>
-              <button className="btn small outline" onClick={async () => onChange(await api.post(`/plans/${plan.id}/date`, { date: t.date }))}>이 날로 확정</button>
-            </div>
-            <div className="bar"><i style={{ width: `${(t.count / max) * 100}%` }} /></div>
-            <small className="muted">{t.voters.join(", ") || "아직 없음"}</small>
-          </li>
-        ))}
-      </ul>
-      <div className="panel-foot">
-        <p className="muted small">
-          미응답: {poll.pending.map((p) => p.name).join(", ") || "없음"}
-          {poll.pending[0] && <> · <Link to={`/vote/${poll.id}?as=${poll.pending[0].id}`} target="_blank">{poll.pending[0].name} 님 화면에서 직접 투표해 보기 ↗</Link></>}
-        </p>
-        <button className="btn outline" disabled={!poll.pending.length} onClick={async () => { await api.post(`/polls/${poll.id}/simulate`, { count: 3 }); refresh(); }}>
-          데모: 부서원 3명 응답 받기
-        </button>
+      <CalLegend items={[["green", "대부분 가능"], ["yellow", "애매함 (절반 안팎)"], ["red", "가능한 사람이 적음"], ["wait", "응답 대기"]]} />
+      <div className="cal-layout">
+        <DateCalendar
+          days={days}
+          onPick={(d) => setFocus(d.date)}
+          cellOf={(d) => {
+            const x = tally.get(d.date);
+            if (!x) return { tone: "muted", sub: d.kind === "off" ? d.reason : "", disabled: true };
+            return { tone: voteTone(x.count, poll.votedCount), sub: `${x.count}표`, focused: focus === d.date };
+          }}
+        />
+        <div className="cal-side">
+          <DayPanel day={t && { label: t.label }} tone={tone} onConfirm={() => (tone === "red" ? setAsk(true) : confirm())}>
+            <p className="day-count"><b>{t?.count}</b>/{poll.votedCount}명이 가능하다고 응답</p>
+            <div className="bar"><i style={{ width: `${poll.votedCount ? (t?.count / poll.votedCount) * 100 : 0}%` }} /></div>
+            <p className="muted small">{t?.voters.join(", ") || "아직 없음"}</p>
+          </DayPanel>
+          <div className="poll-box">
+            <b>응답 현황</b>
+            <p className="muted small">
+              미응답: {poll.pending.map((p) => p.name).join(", ") || "없음"}
+              {poll.pending[0] && <> · <Link to={`/vote/${poll.id}?as=${poll.pending[0].id}`} target="_blank">{poll.pending[0].name} 님 화면에서 직접 투표 ↗</Link></>}
+            </p>
+            <button className="btn outline" disabled={!poll.pending.length} onClick={async () => { await api.post(`/polls/${poll.id}/simulate`, { count: 3 }); refresh(); }}>
+              데모: 부서원 3명 응답 받기
+            </button>
+          </div>
+        </div>
       </div>
+      {ask && <HardDateDialog day={{ label: t.label }} onCancel={() => setAsk(false)} onConfirm={confirm}
+        detail={`응답한 ${poll.votedCount}명 중 ${t.count}명만 가능하다고 답했습니다.`} />}
     </section>
   );
 }
@@ -315,10 +391,9 @@ function VenuePicker({ plan, sendMail }) {
                   <div className="card-kicker">{v.sub} · {v.area}</div>
                   <h3><Link to={`/venue/${v.id}`}>{v.name}</Link></h3>
                 </div>
-                <ScoreBar value={v.score} />
+                <ScoreBar value={v.score} reasons={v.reasons} />
               </div>
               <div className="rec-meta"><Stars value={v.otherRating ?? v.rating} /> <span>1인 평균 {won(v.avgPerHead)}</span> <span>{v.deptCount}개 부서 방문</span></div>
-              <div className="notes">{v.reasons.map((r, k) => <span key={k} className={`note ${r.tone}`}>{r.text}</span>)}</div>
               {open === v.id && (
                 <div className="evidence">
                   <h4>우리 부서·타부서 경비 처리 기록</h4>

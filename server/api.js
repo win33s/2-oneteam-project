@@ -131,7 +131,8 @@ export function apiRouter({ crawl, syncOnPoll }) {
       createdAt: new Date().toISOString(),
     };
     log("캘린더", `부서원 ${plan.memberIds.length}명의 일정과 부서 과제 일정을 ${plan.from} ~ ${plan.to} 범위로 조회`);
-    const { candidates, excluded } = recommendDates(db, plan);
+    const { days, candidates, excluded } = recommendDates(db, plan);
+    plan.calendar = days;
     plan.dateCandidates = candidates;
     plan.excludedPeriods = excluded;
     for (const x of excluded) log("날짜", `중요 과제 일정 "${x.title}" (${x.label})은 후보에서 자동 제외`);
