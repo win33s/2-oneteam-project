@@ -36,7 +36,7 @@ export default function Home() {
       <section className="hero">
         <div className="hero-copy">
           <p className="eyebrow">{dept.name} · {data?.seasonLabel || ""}{data?.weather ? ` · 오늘 ${data.weather.today.label}` : ""}</p>
-          <h1>{me.name} 님,<br />이번 달엔 <em>어떤 기억</em>을 쌓을까요?</h1>
+          <h1>{me.name} {me.title}님,<br />이번 달엔 <em>어떤 기억</em>을 쌓을까요?</h1>
           <p className="lede">다른 부서가 실제로 다녀온 곳과 경비 기록, 참석자 후기를 모아 두었습니다. 날짜 잡기부터 예약, 후기 수집까지 에이전트가 함께합니다.</p>
           <form className="ask" onSubmit={(e) => { e.preventDefault(); ask(); }}>
             <input value={text} onChange={(e) => setText(e.target.value)} placeholder="예) 다음 달에 2만원대로 몸 쓰는 활동 하고 싶어" />

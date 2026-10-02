@@ -26,7 +26,7 @@ export default function ReviewForm() {
 
   return (
     <div className="page narrow">
-      <p className="eyebrow">만족도 조사 · {emp.name} {emp.title} 님 화면</p>
+      <p className="eyebrow">만족도 조사 · {emp.name} {emp.title}님 화면</p>
       <h1 className="page-title">{a.venueName}, 어떠셨나요?</h1>
       <p className="muted">{dateLabel(a.date)} {a.title}. 실서비스에서는 네이버 폼으로 발송되며, 이 화면은 그 역할을 대신하는 데모 폼입니다.</p>
       {sent ? (

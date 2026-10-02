@@ -1,6 +1,6 @@
 import express from "express";
 import { getDb, save, log } from "./db.js";
-import { ME } from "./seed.js";
+import { ME, TITLE } from "./seed.js";
 import { uid, today, ymd, addDays, dateLabel, won } from "./util.js";
 import { recommendDates } from "./agent/scheduler.js";
 import { homeRows, venueDetail, recommendVenues, allVenueCards, bookingUrl, CATEGORY_LABEL } from "./agent/recommender.js";
@@ -47,13 +47,13 @@ export function apiRouter({ crawl, syncOnPoll }) {
       // 명단에 없는 이름은 손님 계정: 기획·메일은 쓸 수 있지만 부서원 목록에는 나오지 않는다
       emp = db.employees.find((e) => e.guest && e.empNo === empNo);
       if (!emp) {
-        emp = { id: `u${empNo}`, guest: true, empNo, title: "사원", email: `user${empNo}@demo-corp.example`, isPlanner: true, prefs: { diet: [], alcohol: "조금", likes: [], allergy: "", dietEtc: "" } };
+        emp = { id: `u${empNo}`, guest: true, empNo, title: TITLE, email: `user${empNo}@demo-corp.example`, isPlanner: true, prefs: { diet: [], alcohol: "조금", likes: [], allergy: "", dietEtc: "" } };
         db.employees.push(emp);
       }
       emp.name = name;
       emp.deptId = dept.id;
     }
-    log("로그인", `${dept.name} ${name} 님 접속`);
+    log("로그인", `${dept.name} ${name} ${TITLE}님 접속`);
     save();
     res.json({ empId: emp.id });
   });
@@ -251,7 +251,7 @@ export function apiRouter({ crawl, syncOnPoll }) {
 
   // --- 투표 ---
   function expandPoll(db, poll) {
-    const name = (id) => db.employees.find((e) => e.id === id)?.name || id;
+    const name = (id) => { const e = db.employees.find((x) => x.id === id); return e ? `${e.name} ${e.title}` : id; };
     const voted = Object.keys(poll.votes);
     return {
       ...poll,
@@ -367,7 +367,7 @@ export function apiRouter({ crawl, syncOnPoll }) {
     if (!emp || !rating) return res.status(400).json({ error: "응답자와 평점이 필요합니다" });
     a.reviews = a.reviews.filter((r) => r.empId !== emp.id);
     a.reviews.push({ id: uid("r"), empId: emp.id, author: emp.name, rating, comment: String(req.body.comment || ""), createdAt: today() });
-    log("후기", `${emp.name} 님 후기 수집 (${rating}점) → 다음 추천에 반영`);
+    log("후기", `${emp.name} ${emp.title}님 후기 수집 (${rating}점) → 다음 추천에 반영`);
     save();
     res.json(expandActivity(db, a, who(req).deptId));
   });

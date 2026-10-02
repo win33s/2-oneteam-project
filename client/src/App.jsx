@@ -56,7 +56,7 @@ function ProfileMenu({ me, dept, onLogout }) {
     <div className="me-menu" ref={ref}>
       <button type="button" className={`me ${open ? "open" : ""}`} aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
         <span className="avatar">{me.name[0]}</span>
-        <span>{me.name}<small>{dept.name}</small></span>
+        <span>{me.name} {me.title}<small>{dept.name}</small></span>
         <i className="me-caret" aria-hidden="true">▾</i>
       </button>
       {open && (

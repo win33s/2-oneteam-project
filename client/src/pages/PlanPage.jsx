@@ -286,7 +286,7 @@ function DatePicker({ plan, onChange, sendMail }) {
             <p className="day-count"><b>{day?.available}</b>/{day?.total}명 참석 가능{day?.kind === "open" && <> · 점수 {day.score}</>}</p>
             <div className="notes">
               {day?.notes.map((n, k) => <span key={k} className={`note ${n.tone}`}>{n.text}</span>)}
-              {day?.conflicts.map((x) => <span key={x.empId} className="note info">{x.name} {x.type}</span>)}
+              {day?.conflicts.map((x) => <span key={x.empId} className="note info">{x.name} {x.title} {x.type}</span>)}
             </div>
           </DayPanel>
           <div className="poll-box">
@@ -301,7 +301,7 @@ function DatePicker({ plan, onChange, sendMail }) {
         </div>
       </div>
       {ask && <HardDateDialog day={day} onCancel={() => setAsk(false)} onConfirm={confirm}
-        detail={day.kind === "blocked" ? day.notes[0].text + "과 겹치는 날입니다." : `${day.total}명 중 ${day.conflicts.length}명이 참석하기 어렵습니다: ${day.conflicts.map((c) => `${c.name}(${c.type})`).join(", ")}`} />}
+        detail={day.kind === "blocked" ? day.notes[0].text + "과 겹치는 날입니다." : `${day.total}명 중 ${day.conflicts.length}명이 참석하기 어렵습니다: ${day.conflicts.map((c) => `${c.name} ${c.title}(${c.type})`).join(", ")}`} />}
     </section>
   );
 }
@@ -348,7 +348,7 @@ function PollPanel({ plan, onChange }) {
             <b>응답 현황</b>
             <p className="muted small">
               미응답: {poll.pending.map((p) => p.name).join(", ") || "없음"}
-              {poll.pending[0] && <> · <Link to={`/vote/${poll.id}?as=${poll.pending[0].id}`} target="_blank">{poll.pending[0].name} 님 화면에서 직접 투표 ↗</Link></>}
+              {poll.pending[0] && <> · <Link to={`/vote/${poll.id}?as=${poll.pending[0].id}`} target="_blank">{poll.pending[0].name}님 화면에서 직접 투표 ↗</Link></>}
             </p>
             <button className="btn outline" disabled={!poll.pending.length} onClick={async () => { await api.post(`/polls/${poll.id}/simulate`, { count: 3 }); refresh(); }}>
               데모: 부서원 3명 응답 받기

@@ -29,7 +29,7 @@ export function recommendDates(db, { memberIds, from, to, slot = "dinner", deptI
     const conflicts = [];
     for (const m of members) {
       const ev = events.find((e) => e.empId === m.id && e.from <= date && date <= e.to);
-      if (ev) conflicts.push({ empId: m.id, name: m.name, title: m.title, type: ev.type });
+      if (ev) conflicts.push({ empId: m.id, name: m.name, title: m.title, lead: Boolean(m.lead), type: ev.type });
     }
     const available = members.length - conflicts.length;
     const ratio = available / Math.max(1, members.length);
@@ -45,7 +45,7 @@ export function recommendDates(db, { memberIds, from, to, slot = "dinner", deptI
     const notes = [];
     let caution = false;
 
-    if (conflicts.some((c) => c.title === "팀장")) {
+    if (conflicts.some((c) => c.lead)) {
       score -= 15;
       caution = true;
       notes.push({ tone: "warn", text: "팀장 일정과 겹침" });

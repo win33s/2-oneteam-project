@@ -32,7 +32,7 @@ export default function VotePage() {
 
   return (
     <div className="page narrow">
-      <p className="eyebrow">날짜 투표 · {voter.name} {voter.title} 님 화면</p>
+      <p className="eyebrow">날짜 투표 · {voter.name} {voter.title}님 화면</p>
       <h1 className="page-title">{poll.title}</h1>
       <section className="panel">
         <p>가능한 날짜를 모두 골라 주세요.</p>

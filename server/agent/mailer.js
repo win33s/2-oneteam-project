@@ -7,7 +7,7 @@ export function sendMail(db, { to, subject, body, type, link, linkLabel }) {
   const mail = {
     id: uid("m"),
     to,
-    toName: emp.name,
+    toName: `${emp.name} ${emp.title}`,
     toEmail: emp.email,
     from: "HBM 에이전트",
     subject,

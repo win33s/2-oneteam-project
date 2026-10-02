@@ -75,7 +75,7 @@ export default function Login({ onDone }) {
           </form>
         ) : (
           <form className="login-form" onSubmit={enter}>
-            <h1>{form.name} 님의 소속을 선택해 주세요</h1>
+            <h1>{form.name} TL님의 소속을 선택해 주세요</h1>
             <p className="muted">선택한 팀의 활동 기록과 부서원 일정을 기준으로 추천합니다.</p>
             <div className="field">
               <span>그룹</span>

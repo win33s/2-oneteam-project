@@ -4,7 +4,7 @@ import { rng, pick, ymd, addDays, today, pad } from "./util.js";
 export const MY_DEPT = "d1";
 export const ME = "e101";
 // 가상 데이터의 구조나 명단을 바꾸면 이 숫자를 올린다. 저장된 데이터의 버전이 다르면 새로 만든다.
-export const SEED_VERSION = 3;
+export const SEED_VERSION = 4;
 
 const DEPARTMENTS = [
   { id: "d1", name: "공정개발2팀", group: "R&D" },
@@ -16,14 +16,15 @@ const DEPARTMENTS = [
 ];
 
 // 부서원 명단. 어느 그룹·팀으로 로그인하든 같은 여섯 명이 보이도록 모든 팀에 똑같이 넣는다.
-// [이름, 직급, 식이 제한, 음주, 선호 카테고리] 식이·음주·선호는 추천 근거를 보여 주기 위한 예시 값이다.
+// 호칭은 모두 TL이다. [이름, 팀장 여부, 식이 제한, 음주, 선호 카테고리] 식이·음주·선호는 추천 근거를 보여 주기 위한 예시 값이다.
+export const TITLE = "TL";
 const ROSTER = [
-  ["박시진", "사원", [], "조금", ["activity", "culture"]],
-  ["문승진", "팀장", [], "좋아함", ["restaurant"]],
-  ["추헌호", "사원", ["해산물 불가"], "조금", ["restaurant", "activity"]],
-  ["최석준", "사원", [], "좋아함", ["activity"]],
-  ["김지우", "사원", ["채식"], "안 마심", ["culture", "cafe"]],
-  ["김기훈", "사원", [], "안 마심", ["activity", "culture"]],
+  ["박시진", false, [], "조금", ["activity", "culture"]],
+  ["문승진", true, [], "좋아함", ["restaurant"]],
+  ["추헌호", false, ["해산물 불가"], "조금", ["restaurant", "activity"]],
+  ["최석준", false, [], "좋아함", ["activity"]],
+  ["김지우", false, ["채식"], "안 마심", ["culture", "cafe"]],
+  ["김기훈", false, [], "안 마심", ["activity", "culture"]],
 ];
 const PEOPLE = Object.fromEntries(DEPARTMENTS.map((d) => [d.id, ROSTER]));
 
@@ -103,12 +104,13 @@ export function buildSeed() {
 
   const employees = [];
   for (const dept of DEPARTMENTS) {
-    PEOPLE[dept.id].forEach(([name, title, diet, alcohol, likes], i) => {
+    PEOPLE[dept.id].forEach(([name, lead, diet, alcohol, likes], i) => {
       const num = Number(dept.id.slice(1)) * 100 + i + 1;
       employees.push({
         id: `e${num}`,
         name,
-        title,
+        title: TITLE,
+        lead,
         deptId: dept.id,
         email: `user${num}@demo-corp.example`,
         isPlanner: i === 0,
