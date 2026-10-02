@@ -54,7 +54,7 @@ export default function Profile() {
   return (
     <div className="page">
       <p className="eyebrow">{dept.name}</p>
-      <h1 className="page-title">부서원 선호 프로필</h1>
+      <h1 className="page-title">부서원 선호사항 설정</h1>
       <p className="muted">바꾸면 바로 저장되고, 다음 장소 추천부터 반영됩니다.</p>
       <section className="panel">
         <div className="table-wrap profile-table">

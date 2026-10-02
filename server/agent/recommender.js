@@ -15,8 +15,11 @@ export const CATEGORY_LABEL = {
 // 후기가 이 수보다 적으면 "덜 알려진 곳"으로 보고 새로운 제안에 넣는다
 const FEW_REVIEWS = 10;
 
-const HOT_RATING = 4.4;
-const OFTEN_VISITS = 4;
+// 추천 정도를 나누는 평점 기준과, 그 판단에 필요한 최소 후기 수
+const LEVEL_HIGH = 4.4;
+const LEVEL_MID = 4.1;
+const MIN_REVIEWS_FOR_LEVEL = 5;
+const FOOD = new Set(["restaurant", "cafe"]);
 
 const avg = (arr) => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null);
 const round1 = (n) => (n == null ? null : Math.round(n * 10) / 10);
@@ -51,21 +54,23 @@ export function venueStats(db, myDeptId) {
 }
 
 /**
- * 카드 뱃지 색의 의미.
- * new(초록): 아직 어느 부서도 안 가 본 곳 / hot(빨강): 후기가 충분하고 평점이 높아 강력 추천 /
- * often(노랑): 여러 번 다녀간 곳 / plain: 그 밖
+ * 카드 포스트잇 색의 의미.
+ * - new(은색): 아직 어느 부서도 안 가 본 곳
+ * - etc(베이지): 후기가 너무 적어 추천 정도를 말하기 어려운 곳
+ * - food-1/2/3 (빨강/주황/노랑): 음식(식당·카페)의 추천 정도 상/중/하
+ * - act-1/2/3 (파랑/남색/보라): 활동(액티비티·문화·숙소)의 추천 정도 상/중/하
  */
-function toneOf(s) {
+function toneOf(v, s) {
   if (s.visitsAll === 0) return "new";
+  if (s.ratings.length < MIN_REVIEWS_FOR_LEVEL) return "etc";
   const rating = avg(s.otherRatings.length ? s.otherRatings : s.ratings);
-  if (rating >= HOT_RATING && s.ratings.length >= FEW_REVIEWS) return "hot";
-  if (s.visitsAll >= OFTEN_VISITS || s.visitsMine >= 2) return "often";
-  return "plain";
+  const level = rating >= LEVEL_HIGH ? 1 : rating >= LEVEL_MID ? 2 : 3;
+  return `${FOOD.has(v.category) ? "food" : "act"}-${level}`;
 }
 
 export function venueCard(v, s, season = seasonOf(today())) {
   return {
-    tone: toneOf(s),
+    tone: toneOf(v, s),
     id: v.id,
     name: v.name,
     category: v.category,
@@ -136,14 +141,14 @@ export function homeRows(db, myDeptId) {
       title: "다른 부서에서 평점이 좋았던 곳",
       hint: "타부서 참석자 후기 평균 기준",
       items: visited.filter((c) => c.otherRating != null && c.reviewCount >= 3).sort(byRating).slice(0, 10)
-        .map((c, i) => ({ ...c, badge: `${c.deptCount}개 부서 방문`, reason: i === 0 ? "타부서 평점 TOP 1!" : `타부서 평점 ${i + 1}위 · 후기 ${c.reviewCount}건` })),
+        .map((c, i) => ({ ...c, rank: i < 3 ? i + 1 : null, badge: `${c.deptCount}개 부서 방문`, reason: i === 0 ? "타부서 평점 TOP 1!" : `타부서 평점 ${i + 1}위 · 후기 ${c.reviewCount}건` })),
     },
     {
       key: "season",
       title: `지금 가기 좋은 곳 — ${SEASON_LABEL[season]}`,
       hint: "이맘때 우리 부서와 다른 부서가 실제로 자주 간 곳",
       items: visited.filter((c) => c.seasons.includes(season) && c.seasonVisits > 0).sort((a, b) => b.seasonVisits - a.seasonVisits || byRating(a, b)).slice(0, 10)
-        .map((c, i) => ({ ...c, badge: `${sName} 추천`, reason: i === 0 ? "지금 시즌엔 여기!" : `${sName}에 ${c.seasonVisits}번 다녀간 곳` })),
+        .map((c, i) => ({ ...c, rank: i < 3 ? i + 1 : null, badge: `${sName} 추천`, reason: i === 0 ? "지금 시즌엔 여기!" : `${sName}에 ${c.seasonVisits}번 다녀간 곳` })),
     },
     {
       key: "photo",
@@ -169,7 +174,7 @@ export function homeRows(db, myDeptId) {
     rows.push({
       key: cat, title: label, hint: "", category: cat,
       items: cards.filter((c) => c.category === cat).sort(byRating)
-        .map((c, i) => ({ ...c, reason: c.brandNew ? "아직 아무도 안 가 본 곳" : i === 0 ? `${label} 평점 1위!` : c.visitsMine >= 2 ? `우리 부서 단골 (${c.visitsMine}회)` : `${c.deptCount}개 부서가 다녀간 곳` })),
+        .map((c, i) => ({ ...c, rank: i < 3 && c.otherRating != null ? i + 1 : null, reason: c.brandNew ? "아직 아무도 안 가 본 곳" : i === 0 ? `${label} 평점 1위!` : c.visitsMine >= 2 ? `우리 부서 단골 (${c.visitsMine}회)` : `${c.deptCount}개 부서가 다녀간 곳` })),
     });
   }
   return { season, seasonLabel: SEASON_LABEL[season], weather, rows };

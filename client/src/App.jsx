@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { NavLink, Route, Routes, Link, useNavigate } from "react-router-dom";
 import { useApi, getSession, clearSession } from "./api.js";
 import Login from "./pages/Login.jsx";
@@ -22,6 +22,44 @@ export default function App() {
   const [signedIn, setSignedIn] = useState(() => Boolean(getSession()));
   if (!signedIn) return <Login onDone={() => setSignedIn(true)} />;
   return <Shell onLogout={() => { clearSession(); setSignedIn(false); }} />;
+}
+
+/** 오른쪽 위 프로필 버튼. 누르면 부서원 선호사항 설정과 로그아웃이 나온다. */
+function ProfileMenu({ me, dept, onLogout }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  // 메뉴 밖을 누르거나 Esc를 누르면 닫는다
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e) => { if (!ref.current?.contains(e.target)) setOpen(false); };
+    const onKey = (e) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => { document.removeEventListener("pointerdown", onDown); document.removeEventListener("keydown", onKey); };
+  }, [open]);
+
+  return (
+    <div className="me-menu" ref={ref}>
+      <button type="button" className={`me ${open ? "open" : ""}`} aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
+        <span className="avatar">{me.name[0]}</span>
+        <span>{me.name}<small>{dept.name}</small></span>
+        <i className="me-caret" aria-hidden="true">▾</i>
+      </button>
+      {open && (
+        <div className="me-pop" role="menu">
+          <Link role="menuitem" to="/profile" onClick={() => setOpen(false)}>
+            <b>부서원 선호사항 설정</b>
+            <small>식이 제한 · 음주 · 좋아하는 활동</small>
+          </Link>
+          <button role="menuitem" type="button" className="me-logout" onClick={onLogout}>
+            <b>로그아웃</b>
+            <small>처음 로그인 화면으로</small>
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function Shell({ onLogout }) {
@@ -49,15 +87,11 @@ function Shell({ onLogout }) {
           <NavLink to="/mailbox">
             메일함{status?.unread ? <em className="count">{status.unread}</em> : null}
           </NavLink>
-          <NavLink to="/profile">부서원 프로필</NavLink>
           <a href="/erp/expenses" target="_blank" rel="noreferrer">ERP ↗</a>
         </nav>
         <div className="topbar-right">
           <button className="ghost" onClick={() => setLogOpen((v) => !v)}>에이전트 로그</button>
-          <Link to="/profile" className="me">
-            <span className="avatar">{boot.me.name[0]}</span>
-            <span>{boot.me.name}<small>{boot.dept.name}</small></span>
-          </Link>
+          <ProfileMenu me={boot.me} dept={boot.dept} onLogout={() => { navigate("/"); onLogout(); }} />
           <img className="corp-logo" src="/sk-hynix-logo.jpg" alt="SK hynix" />
         </div>
       </header>
@@ -80,7 +114,6 @@ function Shell({ onLogout }) {
         </Routes>
       </main>
 
-      <button className="logout" onClick={() => { navigate("/"); onLogout(); }}>← 로그아웃</button>
       <AgentLog open={logOpen} onClose={() => setLogOpen(false)} />
     </BootContext.Provider>
   );

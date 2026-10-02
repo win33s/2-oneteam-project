@@ -856,3 +856,71 @@ html[data-scrolled] .topbar { box-shadow: 0 1px 0 var(--line); }
 .won-input { position: relative; display: block; }
 .won-input input { padding-right: 34px; font-variant-numeric: tabular-nums; }
 .won-input i { position: absolute; right: 13px; top: 50%; translate: 0 -50%; font-style: normal; font-weight: 400; color: var(--ink-3); pointer-events: none; }
+
+/* =====================================================================
+   v7: 낮은 추천 카드 + 포스트잇 범주 + 순위 표시
+   포스트잇 색: 음식 빨강→주황→노랑, 활동 파랑→남색→보라, 새로운 곳 은색, 기타 베이지
+   ===================================================================== */
+:root {
+  --food-1: #e4002b; --food-2: #f47b20; --food-3: #fdc12f;
+  --act-1: #2f80ed; --act-2: #1f3a8a; --act-3: #8b5cf6;
+  --tone-new: #c5ccd6; --tone-etc: #eadfd2;
+}
+.row-track { padding-top: 24px; }
+.card { flex: 0 0 248px; aspect-ratio: auto; min-height: 0; }
+.card-body { height: auto; padding: 16px 16px 14px; gap: 0; }
+.card-tags { min-height: 24px; padding-right: 64px; margin-bottom: 8px; }
+.card-body h3 { font-size: 19px; -webkit-line-clamp: 1; }
+.card-foot { margin-top: 12px; }
+.card-reason { margin-top: 6px; }
+.card-dot { display: none; }
+
+/* 포스트잇: 카드 위쪽에 붙은 메모지. 오른쪽 아래 귀퉁이를 접었다. */
+.card-note {
+  position: absolute; top: -16px; right: 12px; z-index: 2; width: 58px; height: 60px; padding-top: 7px;
+  display: flex; flex-direction: column; align-items: center; gap: 1px; rotate: 5deg; color: #fff; background: var(--tone-etc);
+  clip-path: polygon(0 0, 100% 0, 100% 76%, 76% 100%, 0 100%);
+  transition: transform .4s var(--spring), rotate .4s var(--spring);
+}
+.card-note::after { content: ""; position: absolute; right: 0; bottom: 0; width: 24%; height: 24%; background: rgba(0, 0, 0, .22); clip-path: polygon(0 0, 100% 0, 0 100%); }
+.card-note-icon { font-size: 25px; line-height: 1; }
+.card-note-label { font-size: 10.5px; font-weight: 800; letter-spacing: -.02em; }
+.card:hover .card-note { transform: translateY(-5px) scale(1.12); rotate: -4deg; }
+.card:active .card-note { transform: scale(.95); }
+.row.rv-in .card .card-note { animation: noteIn .55s var(--spring) backwards; animation-delay: calc(var(--i, 0) * 60ms + 240ms); }
+@keyframes noteIn { from { transform: translateY(-26px) rotate(-18deg); opacity: 0; } }
+
+.tone-food-1 .card-note, .tone-dot.tone-food-1 { background: var(--food-1); }
+.tone-food-2 .card-note, .tone-dot.tone-food-2 { background: var(--food-2); }
+.tone-food-3 .card-note, .tone-dot.tone-food-3 { background: var(--food-3); }
+.tone-act-1 .card-note, .tone-dot.tone-act-1 { background: var(--act-1); }
+.tone-act-2 .card-note, .tone-dot.tone-act-2 { background: var(--act-2); }
+.tone-act-3 .card-note, .tone-dot.tone-act-3 { background: var(--act-3); }
+.tone-new .card-note, .tone-dot.tone-new { background: var(--tone-new); }
+.tone-etc .card-note, .tone-dot.tone-etc { background: var(--tone-etc); }
+.tone-food-3 .card-note, .tone-new .card-note, .tone-etc .card-note { color: var(--ink); }
+
+/* 순위 꼬리표 */
+.card-rank { font-size: 11px; font-weight: 800; border-radius: 7px; padding: 3px 8px; background: var(--fill-2); color: var(--ink-2); }
+.card-rank.r1 { background: #ffd84d; color: #6b4a00; }
+.card-rank.r2 { background: #dfe4ea; color: #475160; }
+.card-rank.r3 { background: #f0c9a4; color: #7a4315; }
+.row.rv-in .card .card-rank.r1 { animation: pop .5s var(--spring) backwards; animation-delay: calc(var(--i, 0) * 60ms + 420ms); }
+
+.tone-legend { gap: 8px 22px; align-items: center; }
+.tone-legend li { gap: 5px; } .tone-legend b { font-weight: 700; margin-right: 3px; color: var(--ink); }
+.tone-legend span { color: var(--ink-3); font-size: 12px; margin-left: 3px; }
+.tone-dot { border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) { .row.rv-in .card .card-note, .row.rv-in .card .card-rank.r1 { animation: none; } }
+
+/* ---- 프로필 메뉴 (부서원 선호사항 설정 · 로그아웃) ---- */
+.me-menu { position: relative; }
+button.me { border: 0; background: none; cursor: pointer; padding: 5px 10px 5px 5px; border-radius: 14px; text-align: left; transition: background .2s, transform .2s var(--spring); }
+button.me:hover, button.me.open { background: var(--fill); } button.me:active { transform: scale(.96); }
+.me-caret { font-style: normal; font-size: 12px; color: var(--ink-3); transition: rotate .25s var(--spring); } .me.open .me-caret { rotate: 180deg; }
+.me-pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 50; min-width: 230px; padding: 6px; border-radius: 16px; background: #fff; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; gap: 2px; animation: drop .22s var(--spring); }
+.me-pop a, .me-pop button { display: flex; flex-direction: column; gap: 1px; width: 100%; padding: 10px 12px; border: 0; border-radius: 11px; background: none; text-align: left; text-decoration: none; color: var(--ink); font: inherit; cursor: pointer; transition: background .15s, padding-left .2s var(--spring); }
+.me-pop a:hover, .me-pop button:hover { background: var(--fill); padding-left: 16px; }
+.me-pop b { font-size: 14px; } .me-pop small { font-size: 12px; color: var(--ink-3); display: block; }
+.me-pop .me-logout b { color: var(--red); }
+@media (max-width: 900px) { button.me span:last-of-type { display: none; } }
