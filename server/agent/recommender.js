@@ -15,10 +15,8 @@ export const CATEGORY_LABEL = {
 // 후기가 이 수보다 적으면 "덜 알려진 곳"으로 보고 새로운 제안에 넣는다
 const FEW_REVIEWS = 10;
 
-// 추천 정도를 나누는 평점 기준과, 그 판단에 필요한 최소 후기 수
-const LEVEL_HIGH = 4.4;
-const LEVEL_MID = 4.1;
-const MIN_REVIEWS_FOR_LEVEL = 5;
+// 후기가 이 수보다 적으면 범주 색 대신 "기타(회색)"로 표시한다
+const MIN_REVIEWS_FOR_TONE = 5;
 const FOOD = new Set(["restaurant", "cafe"]);
 
 const avg = (arr) => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null);
@@ -54,18 +52,15 @@ export function venueStats(db, myDeptId) {
 }
 
 /**
- * 카드 포스트잇 색의 의미.
- * - new(은색): 아직 어느 부서도 안 가 본 곳
- * - etc(베이지): 후기가 너무 적어 추천 정도를 말하기 어려운 곳
- * - food-1/2/3 (빨강/주황/노랑): 음식(식당·카페)의 추천 정도 상/중/하
- * - act-1/2/3 (파랑/남색/보라): 활동(액티비티·문화·숙소)의 추천 정도 상/중/하
+ * 카드 원형 뱃지 색의 의미. 추천 정도는 색이 아니라 순위 꼬리표와 아래 코멘트로 알린다.
+ * - new(흰색): 아직 어느 부서도 안 가 본 곳
+ * - etc(회색): 후기가 너무 적은 곳
+ * - food(빨강): 음식(식당·카페) / act(보라): 활동(액티비티·문화·숙소)
  */
 function toneOf(v, s) {
   if (s.visitsAll === 0) return "new";
-  if (s.ratings.length < MIN_REVIEWS_FOR_LEVEL) return "etc";
-  const rating = avg(s.otherRatings.length ? s.otherRatings : s.ratings);
-  const level = rating >= LEVEL_HIGH ? 1 : rating >= LEVEL_MID ? 2 : 3;
-  return `${FOOD.has(v.category) ? "food" : "act"}-${level}`;
+  if (s.ratings.length < MIN_REVIEWS_FOR_TONE) return "etc";
+  return FOOD.has(v.category) ? "food" : "act";
 }
 
 export function venueCard(v, s, season = seasonOf(today())) {

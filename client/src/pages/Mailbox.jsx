@@ -5,6 +5,11 @@ import { useBoot } from "../App.jsx";
 
 const TYPE = { vote: "날짜 투표", announce: "안내", review: "후기 요청", record: "기록 업데이트" };
 
+/** 메일 본문의 **굵게** 표시를 실제 굵은 글씨로 바꾼다 */
+function renderBody(body) {
+  return body.split(/\*\*(.+?)\*\*/g).map((part, i) => (i % 2 ? <strong key={i}>{part}</strong> : part));
+}
+
 export default function Mailbox() {
   const { me, employees } = useBoot();
   const [to, setTo] = useState(me.id);
@@ -38,7 +43,7 @@ export default function Mailbox() {
             {openId === m.id && (
               <div className="mail-body">
                 <p className="muted small">보낸 사람: {m.from} · 받는 사람: {m.toName} &lt;{m.toEmail}&gt;</p>
-                <pre>{m.body}</pre>
+                <pre>{renderBody(m.body)}</pre>
                 {m.link && <Link className="btn small" to={m.link}>{m.linkLabel}</Link>}
               </div>
             )}

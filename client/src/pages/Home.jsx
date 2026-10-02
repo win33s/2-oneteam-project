@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { api, useApi, won } from "../api.js";
+import { api, useApi } from "../api.js";
 import { useBoot } from "../App.jsx";
-import { Carousel, Stars, artStyle, ToneLegend } from "../components/VenueCard.jsx";
+import { Carousel, VenueCard, ToneLegend } from "../components/VenueCard.jsx";
 import { ChipBuddy, Wafer, ChipStack, CircuitLine } from "../components/ChipArt.jsx";
 
 const EXAMPLES = ["이번 달 3만원대 회식 장소 추천해 줘", "다음 달에 몸 쓰는 활동 하고 싶어", "MBTI 같은 문화 활동 2만원 이내"];
@@ -51,18 +51,7 @@ export default function Home() {
           <div className="hero-side">
           <Wafer className="hero-wafer" />
           <ChipBuddy className="hero-buddy" />
-          <Link to={`/venue/${pick.id}`} className="hero-pick" style={artStyle(pick.hue)}>
-            <span className="hero-pick-label">{pick.reason || "이번 시즌 첫 번째 추천"}</span>
-            <span className="hero-pick-emoji">{pick.emoji}</span>
-            <div className="hero-pick-body">
-              <div className="card-kicker">{pick.sub} · {pick.area}</div>
-              <h3>{pick.name}</h3>
-              <div className="card-meta">
-                <Stars value={pick.otherRating ?? pick.rating} />
-                <span>{pick.deptCount}개 부서 방문 · 1인 {won(pick.avgPerHead)}</span>
-              </div>
-            </div>
-          </Link>
+          <VenueCard v={{ ...pick, badge: pick.badge || "이번 시즌 추천" }} className="hero-card" />
           </div>
         )}
       </section>

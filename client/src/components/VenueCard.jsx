@@ -16,40 +16,22 @@ export function Stars({ value }) {
   return <span className="stars">★ {value.toFixed(1)}</span>;
 }
 
-// 포스트잇 색의 뜻. 음식은 빨강→주황→노랑, 활동은 파랑→남색→보라 순으로 추천 정도가 높다.
-export const TONES = {
-  "food-1": "음식 · 강력 추천", "food-2": "음식 · 추천", "food-3": "음식 · 보통",
-  "act-1": "활동 · 강력 추천", "act-2": "활동 · 추천", "act-3": "활동 · 보통",
-  new: "새로운 곳", etc: "기타 (후기 적음)",
-};
-const CATEGORY_SHORT = { restaurant: "식당", cafe: "카페", activity: "액티비티", culture: "문화", stay: "숙소" };
+// 원형 뱃지 색의 뜻
+export const TONES = { food: "식당·카페", act: "활동", new: "새로운 곳", etc: "기타 (후기 적음)" };
 
 export function ToneLegend() {
-  const scale = (label, tones) => (
-    <li>
-      <b>{label}</b>
-      {tones.map((t) => <i key={t} className={`tone-dot tone-${t}`} />)}
-      <span>추천 높음 → 보통</span>
-    </li>
-  );
   return (
     <ul className="tone-legend">
-      {scale("음식", ["food-1", "food-2", "food-3"])}
-      {scale("활동", ["act-1", "act-2", "act-3"])}
-      <li><i className="tone-dot tone-new" />새로운 곳</li>
-      <li><i className="tone-dot tone-etc" />기타 (후기 적음)</li>
+      {Object.entries(TONES).map(([tone, label]) => <li key={tone}><i className={`tone-dot tone-${tone}`} />{label}</li>)}
     </ul>
   );
 }
 
-export function VenueCard({ v, i = 0 }) {
+export function VenueCard({ v, i = 0, className = "" }) {
   const tone = v.tone || "etc";
   return (
-    <Link to={`/venue/${v.id}`} className={`card tone-${tone}`} style={{ "--i": Math.min(i, 8) }}>
-      <span className="card-note" title={TONES[tone]}>
-        <span className="card-note-icon">{v.emoji}</span>
-        <span className="card-note-label">{CATEGORY_SHORT[v.category] || "기타"}</span>
-      </span>
+    <Link to={`/venue/${v.id}`} className={`card tone-${tone} ${className}`} style={{ "--i": Math.min(i, 8) }}>
+      <span className="card-dot" title={TONES[tone]}>{v.emoji}</span>
       <div className="card-body">
         <div className="card-tags">
           {v.rank && <span className={`card-rank r${v.rank}`}>{v.rank === 1 ? "👑 " : ""}{v.rank}위</span>}

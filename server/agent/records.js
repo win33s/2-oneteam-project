@@ -117,7 +117,7 @@ export function registerActivity(db, expense, { silent }) {
         subject: `[기록 업데이트] ${dateLabel(expense.useDate)} ${venue.name} 활동이 부서 기록에 올라갔습니다`,
         body: `ERP에 등록된 전표(${expense.docNo}, ${won(expense.amount)}, ${expense.accountName})를 읽어 부서 조직문화활동 기록으로 올렸습니다.
 
-이번 활동이 어땠는지, 다음 담당자가 알아 두면 좋을 점을 코멘트로 남겨 주세요.
+**이번 활동이 어땠는지, 다음 담당자가 알아 두면 좋을 점을 코멘트로 남겨 주세요.**
 ${willSend ? "미리 요청하신 대로 참석자에게 후기 폼을 발송했습니다." : "후기 폼은 아직 보내지 않았습니다. 기록 화면에서 발송할 수 있습니다."}`,
         link: `/history/${activity.id}`,
         linkLabel: "기록 보고 코멘트 남기기",
