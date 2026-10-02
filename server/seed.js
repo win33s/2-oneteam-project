@@ -3,6 +3,8 @@ import { rng, pick, ymd, addDays, today, pad } from "./util.js";
 
 export const MY_DEPT = "d1";
 export const ME = "e101";
+// 가상 데이터의 구조나 명단을 바꾸면 이 숫자를 올린다. 저장된 데이터의 버전이 다르면 새로 만든다.
+export const SEED_VERSION = 3;
 
 const DEPARTMENTS = [
   { id: "d1", name: "공정개발2팀", group: "R&D" },
@@ -241,7 +243,7 @@ export function buildSeed() {
   }
 
   return {
-    meta: { seededAt: now },
+    meta: { seededAt: now, seedVersion: SEED_VERSION },
     departments: DEPARTMENTS,
     employees,
     venues: VENUES,

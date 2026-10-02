@@ -4,7 +4,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildSeed } from "./seed.js";
+import { buildSeed, SEED_VERSION } from "./seed.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 export const DB_PATH = path.join(here, "..", "data", "db.json");
@@ -31,8 +31,10 @@ async function getRedis() {
 export async function loadDb() {
   if (storage === "redis") {
     const stored = await (await getRedis()).get(REDIS_KEY);
-    db = stored || buildSeed();
-    dirty = !stored;
+    // 저장된 데이터가 예전 버전(옛 명단 등)이면 버리고 새로 만든다
+    const usable = stored && stored.meta?.seedVersion === SEED_VERSION;
+    db = usable ? stored : buildSeed();
+    dirty = !usable;
   } else if (!db) {
     getDb();
   }
@@ -43,6 +45,10 @@ export function getDb() {
   if (db) return db;
   if (storage === "file" && fs.existsSync(DB_PATH)) {
     db = JSON.parse(fs.readFileSync(DB_PATH, "utf8"));
+    if (db.meta?.seedVersion !== SEED_VERSION) {
+      db = buildSeed();
+      save();
+    }
   } else {
     db = buildSeed();
     save();
