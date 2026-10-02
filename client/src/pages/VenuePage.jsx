@@ -48,7 +48,14 @@ export default function VenuePage() {
         <section className="panel">
           <h2>단체 사진 <span className="muted">사내 블로그·동아리 게시판</span></h2>
           <ul className="count-list">
-            {v.photoPosts.map((p, i) => <li key={i}><span>{p.source}{p.title ? ` · ${p.title}` : ""}</span><b>사진 {p.photos}장</b></li>)}
+            {v.photoPosts.map((p, i) => (
+              <li key={i}>
+                <Link className="photo-link" to={`/gallery/${v.id}?post=${i}`}>
+                  <span>{p.source}{p.title ? ` · ${p.title}` : ""}</span>
+                  <b>사진 {p.photos}장 →</b>
+                </Link>
+              </li>
+            ))}
             {!v.photoPosts.length && <li className="muted">올라온 사진이 없습니다.</li>}
           </ul>
         </section>

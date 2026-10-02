@@ -2,11 +2,15 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api, useApi, won, dateLabel } from "../api.js";
 import { artStyle, Stars } from "../components/VenueCard.jsx";
+import MailSendOverlay from "../components/MailSendOverlay.jsx";
+import { useBoot } from "../App.jsx";
 
 export default function ActivityPage() {
   const { id } = useParams();
   const { data: a, error, setData } = useApi(`/activities/${id}`, { intervalMs: 4000 });
   const [text, setText] = useState("");
+  const [mailJob, setMailJob] = useState(null);
+  const { employees } = useBoot();
   if (error) return <div className="center-note">{error}</div>;
   if (!a) return <div className="center-note">불러오는 중…</div>;
 
@@ -69,13 +73,19 @@ export default function ActivityPage() {
         {a.mine && !a.reviewFormSent && (
           <div className="callout ask">
             <b>참석자에게 후기를 묻는 폼을 작성해 발송할까요?</b>
-            <div className="ask-actions"><button className="btn small" onClick={async () => setData(await api.post(`/activities/${id}/review-form`))}>후기 폼 발송</button></div>
+            <div className="ask-actions"><button className="btn small" onClick={() => setMailJob({
+              title: "후기 폼 메일을 보내는 중",
+              subject: `[후기 요청] ${a.venueName} 어떠셨나요?`,
+              recipients: employees.filter((e) => (a.participantIds.length ? a.participantIds.includes(e.id) : e.deptId === a.deptId)),
+              run: async () => setData(await api.post(`/activities/${id}/review-form`)),
+            })}>후기 폼 발송</button></div>
           </div>
         )}
         {a.reviewFormSent && a.participantIds[0] && (
           <p className="muted small"><Link to={`/review/${a.id}?as=${a.participantIds[1] || a.participantIds[0]}`} target="_blank">참석자 화면에서 후기 폼 작성해 보기 ↗</Link></p>
         )}
       </section>
+      {mailJob && <MailSendOverlay job={mailJob} onClose={() => setMailJob(null)} />}
     </div>
   );
 }

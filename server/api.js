@@ -46,7 +46,7 @@ export function apiRouter({ crawl, syncOnPoll }) {
       emp.deptId = dept.id;
       emp.isPlanner = true;
     } else {
-      emp = { id: `u${empNo}`, empNo, name, title: "사원", deptId: dept.id, email: `user${empNo}@demo-corp.example`, isPlanner: true, prefs: { diet: [], alcohol: "조금", likes: [] } };
+      emp = { id: `u${empNo}`, empNo, name, title: "사원", deptId: dept.id, email: `user${empNo}@demo-corp.example`, isPlanner: true, prefs: { diet: [], alcohol: "조금", likes: [], allergy: "", dietEtc: "" } };
       db.employees.push(emp);
     }
     log("로그인", `${dept.name} ${name} 님 접속`);
@@ -390,8 +390,9 @@ export function apiRouter({ crawl, syncOnPoll }) {
     const db = getDb();
     const emp = db.employees.find((e) => e.id === req.params.id);
     if (!emp) return notFound(res, "구성원");
-    const { diet, alcohol, likes } = req.body;
-    emp.prefs = { diet: diet || [], alcohol: alcohol || "조금", likes: likes || [] };
+    const { diet, alcohol, likes, allergy, dietEtc } = req.body;
+    const text = (v) => String(v || "").trim().slice(0, 60);
+    emp.prefs = { diet: diet || [], alcohol: alcohol || "조금", likes: likes || [], allergy: text(allergy), dietEtc: text(dietEtc) };
     save();
     res.json(emp);
   });

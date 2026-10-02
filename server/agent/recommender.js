@@ -28,7 +28,7 @@ export function venueStats(db, myDeptId) {
     const season = seasonOf(a.date);
     s.bySeason[season] = (s.bySeason[season] || 0) + 1;
     s.perHeads.push(a.perHead);
-    if (a.blog) s.photoPosts.push({ source: "사내 블로그", photos: a.blog.photos, title: a.blog.title });
+    if (a.blog) s.photoPosts.push({ source: "사내 블로그", photos: a.blog.photos, title: a.blog.title, date: a.date, deptName: a.deptName });
     if (!s.lastVisited || a.date > s.lastVisited) s.lastVisited = a.date;
     const mine = a.deptId === myDeptId;
     if (mine) {
@@ -184,12 +184,16 @@ export function recommendVenues(db, { memberIds = [], category, budgetPerHead, d
   const diet = (word) => members.filter((m) => m.prefs.diet.includes(word));
   const veg = diet("채식"), noSeafood = diet("해산물 불가"), noSpicy = diet("매운 음식 불가");
   const nonDrinkers = members.filter((m) => m.prefs.alcohol === "안 마심");
+  // 직접 입력한 알레르기·기타 식이는 메뉴를 알 수 없어 점수에 넣지 않고, 음식이 나오는 곳에 확인 사항으로만 띄운다
+  const allergic = members.filter((m) => m.prefs.allergy);
+  const etc = members.filter((m) => m.prefs.dietEtc);
   const names = (arr) => arr.map((m) => m.name).join(", ");
 
   // 날씨·예산·개인 선호처럼 방문 이력과 무관한 적합도
   function fit(v, card) {
     const reasons = [];
     let delta = 0;
+    const food = v.category === "restaurant" || v.category === "cafe" || v.sub.includes("쿠킹");
     if (v.outdoor) {
       if (weather.outdoorOk) { delta += 6; reasons.push({ tone: "good", text: `${weather.label} 예보, 야외 활동하기 좋음` }); }
       else { delta -= 20; reasons.push({ tone: "warn", text: `${weather.label} 예보라 야외는 어려움` }); }
@@ -206,6 +210,8 @@ export function recommendVenues(db, { memberIds = [], category, budgetPerHead, d
     }
     if (noSeafood.length && v.f.seafood) { delta -= 10 * noSeafood.length; reasons.push({ tone: "warn", text: `해산물을 못 드시는 분이 있음 (${names(noSeafood)})` }); }
     if (noSpicy.length && v.f.spicy) { delta -= 6 * noSpicy.length; reasons.push({ tone: "warn", text: `매운 메뉴 위주 (${names(noSpicy)})` }); }
+    if (food && allergic.length) reasons.push({ tone: "warn", text: `알레르기 확인 필요: ${allergic.map((m) => `${m.name}(${m.prefs.allergy})`).join(", ")}` });
+    if (food && etc.length) reasons.push({ tone: "info", text: `기타 식이 요청: ${etc.map((m) => `${m.name}(${m.prefs.dietEtc})`).join(", ")}` });
     if (v.f.alcohol && members.length && nonDrinkers.length / members.length >= 0.25) { delta -= 8; reasons.push({ tone: "warn", text: `술 위주인데 비음주 ${nonDrinkers.length}명` }); }
     const fans = members.filter((m) => m.prefs.likes.includes(v.category));
     if (fans.length) { delta += Math.min(10, fans.length * 2); reasons.push({ tone: "good", text: `${CATEGORY_LABEL[v.category]} 선호 ${fans.length}명` }); }

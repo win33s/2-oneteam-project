@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { api, useApi, won } from "../api.js";
 import { useBoot } from "../App.jsx";
 import { Carousel, Stars, artStyle } from "../components/VenueCard.jsx";
+import { ChipBuddy, Wafer, ChipStack, CircuitLine } from "../components/ChipArt.jsx";
 
 const EXAMPLES = ["이번 달 3만원대 회식 장소 추천해 줘", "다음 달에 몸 쓰는 활동 하고 싶어", "MBTI 같은 문화 활동 2만원 이내"];
 
@@ -47,6 +48,9 @@ export default function Home() {
           </div>
         </div>
         {pick && (
+          <div className="hero-side">
+          <Wafer className="hero-wafer" />
+          <ChipBuddy className="hero-buddy" />
           <Link to={`/venue/${pick.id}`} className="hero-pick" style={artStyle(pick.hue)}>
             <span className="hero-pick-label">{pick.reason || "이번 시즌 첫 번째 추천"}</span>
             <span className="hero-pick-emoji">{pick.emoji}</span>
@@ -59,6 +63,7 @@ export default function Home() {
               </div>
             </div>
           </Link>
+          </div>
         )}
       </section>
 
@@ -79,6 +84,16 @@ export default function Home() {
           action={r.category ? <Link className="link" to={`/plan?category=${r.category}`}>이 유형으로 기획</Link> : null}
         />
       ))}
+
+      {data && (
+        <footer className="home-foot">
+          <CircuitLine />
+          <div className="home-foot-body">
+            <ChipStack className="foot-stack" />
+            <p><b>한 층씩 쌓아 붙이는 칩처럼,</b><br />우리 부서의 기억도 한 번씩 쌓여 갑니다.</p>
+          </div>
+        </footer>
+      )}
     </div>
   );
 }

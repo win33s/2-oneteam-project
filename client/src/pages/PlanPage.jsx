@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { api, useApi, won, dateLabel, addDaysStr } from "../api.js";
 import { useBoot } from "../App.jsx";
 import { artStyle, Stars } from "../components/VenueCard.jsx";
+import MailSendOverlay from "../components/MailSendOverlay.jsx";
 
 const SLOTS = { dinner: "저녁", lunch: "점심", allday: "종일" };
 const STEPS = ["조건", "날짜", "장소", "확정·예약", "기록"];
@@ -152,10 +153,17 @@ function PlanForm() {
 /* ---------- 2~5단계 ---------- */
 function PlanFlow({ id }) {
   const { data: plan, error, setData } = useApi(`/plans/${id}`, { intervalMs: 2500 });
-  const { categories } = useBoot();
+  const { categories, employees } = useBoot();
+  const [mailJob, setMailJob] = useState(null);
   if (error) return <div className="center-note">{error}</div>;
   if (!plan) return <div className="center-note">불러오는 중…</div>;
   const step = stepOf(plan);
+  // 메일을 보내는 동작은 발송 단계 화면을 띄우고, 서버 응답이 오면 기획 상태를 갱신한다
+  const sendMail = (job) => setMailJob({
+    ...job,
+    recipients: employees.filter((e) => plan.memberIds.includes(e.id)),
+    run: async () => setData(await job.run()),
+  });
 
   return (
     <div className="page">
@@ -168,7 +176,7 @@ function PlanFlow({ id }) {
         </p>
       </div>
 
-      {plan.status === "draft" && <DatePicker plan={plan} onChange={setData} />}
+      {plan.status === "draft" && <DatePicker plan={plan} onChange={setData} sendMail={sendMail} />}
       {plan.status === "voting" && <PollPanel plan={plan} onChange={setData} />}
       {step >= 2 && (
         <div className="confirmed-line">
@@ -176,8 +184,9 @@ function PlanFlow({ id }) {
           {plan.venue && <><span>장소</span><b>{plan.venue.emoji} {plan.venue.name}</b></>}
         </div>
       )}
-      {plan.status === "date_confirmed" && <VenuePicker plan={plan} onChange={setData} />}
+      {plan.status === "date_confirmed" && <VenuePicker plan={plan} sendMail={sendMail} />}
       {step >= 3 && <Confirmed plan={plan} onChange={setData} />}
+      {mailJob && <MailSendOverlay job={mailJob} onClose={() => setMailJob(null)} />}
     </div>
   );
 }
@@ -186,7 +195,7 @@ function ScoreBar({ value }) {
   return <span className="scorebar" title="추천 점수"><span className="track"><i style={{ width: `${value}%` }} /></span><b>{value}</b></span>;
 }
 
-function DatePicker({ plan, onChange }) {
+function DatePicker({ plan, onChange, sendMail }) {
   const [picked, setPicked] = useState(() => new Set(plan.dateCandidates.slice(0, 3).map((c) => c.date)));
   const [busy, setBusy] = useState(false);
   const toggle = (d) => setPicked((prev) => { const n = new Set(prev); n.has(d) ? n.delete(d) : n.add(d); return n; });
@@ -224,7 +233,11 @@ function DatePicker({ plan, onChange }) {
       </ul>
       <div className="panel-foot">
         <p className="muted small">후보가 여럿이면 투표로 정하세요. 선택한 {picked.size}개 날짜가 부서원 {plan.memberIds.length}명에게 메일로 발송됩니다.</p>
-        <button className="btn" disabled={busy || picked.size < 2} onClick={() => run(() => api.post(`/plans/${plan.id}/poll`, { dates: [...picked] }))}>
+        <button className="btn" disabled={busy || picked.size < 2} onClick={() => sendMail({
+          title: "날짜 투표 메일을 보내는 중",
+          subject: `[날짜 투표] ${plan.title} 가능한 날짜를 골라 주세요`,
+          run: () => api.post(`/plans/${plan.id}/poll`, { dates: [...picked] }),
+        })}>
           선택한 후보로 투표 메일 보내기
         </button>
       </div>
@@ -267,17 +280,17 @@ function PollPanel({ plan, onChange }) {
   );
 }
 
-function VenuePicker({ plan, onChange }) {
+function VenuePicker({ plan, sendMail }) {
   const { data } = useApi(`/plans/${plan.id}/venues`);
   const [open, setOpen] = useState(null);
-  const [busy, setBusy] = useState(false);
   if (!data) return <div className="center-note">경비 기록과 후기를 모으는 중…</div>;
   const { recommendations: recs, fresh, weather, advice, preferred } = data;
 
-  const confirm = async (venueId) => {
-    setBusy(true);
-    try { onChange(await api.post(`/plans/${plan.id}/confirm`, { venueId })); } finally { setBusy(false); }
-  };
+  const confirm = (v) => sendMail({
+    title: "안내 메일을 보내는 중",
+    subject: `[안내] ${plan.title} — ${dateLabel(plan.date)} ${v.name}`,
+    run: () => api.post(`/plans/${plan.id}/confirm`, { venueId: v.id }),
+  });
 
   return (
     <section className="panel">
@@ -318,12 +331,12 @@ function VenuePicker({ plan, onChange }) {
                   ) : <p className="muted small">경비 기록이 없습니다.</p>}
                   {v.evidence.reviews.map((r) => <p key={r.id} className="quote">“{r.comment}” <small>{r.deptName} · ★{r.rating}</small></p>)}
                   {v.evidence.tips.map((t, k) => <p key={k} className="quote tip">담당자 팁: {t.text} <small>{t.deptName}</small></p>)}
-                  {v.photoCount > 0 && <p className="muted small">단체 사진 게시글 {v.photoCount}건: {[...new Set(v.photoPosts.map((p) => p.source))].join(", ")}</p>}
+                  {v.photoCount > 0 && <p className="muted small">단체 사진 게시글 {v.photoCount}건: {[...new Set(v.photoPosts.map((p) => p.source))].join(", ")} · <Link to={`/gallery/${v.id}`} target="_blank">갤러리에서 보기 ↗</Link></p>}
                 </div>
               )}
               <div className="rec-actions">
                 <button className="link" onClick={() => setOpen(open === v.id ? null : v.id)}>{open === v.id ? "근거 접기" : "추천 근거 보기"}</button>
-                <button className="btn small" disabled={busy} onClick={() => confirm(v.id)}>이곳으로 확정하고 안내 메일 보내기</button>
+                <button className="btn small" onClick={() => confirm(v)}>이곳으로 확정하고 안내 메일 보내기</button>
               </div>
             </div>
           </li>
@@ -340,7 +353,7 @@ function VenuePicker({ plan, onChange }) {
                 <div className="card-kicker">{v.sub} · {v.area}</div>
                 <h3><Link to={`/venue/${v.id}`}>{v.name}</Link></h3>
                 <div className="notes">{v.reasons.slice(0, 4).map((r, k) => <span key={k} className={`note ${r.tone}`}>{r.text}</span>)}</div>
-                <button className="btn small outline" disabled={busy} onClick={() => confirm(v.id)}>이곳으로 확정</button>
+                <button className="btn small outline" onClick={() => confirm(v)}>이곳으로 확정하고 안내 메일 보내기</button>
               </li>
             ))}
           </ul>

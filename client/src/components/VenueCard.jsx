@@ -2,18 +2,22 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { won } from "../api.js";
 
-export const artStyle = (hue) => ({
-  background: `radial-gradient(120% 90% at 85% 10%, hsl(${hue + 28} 78% 84%) 0%, transparent 60%), linear-gradient(140deg, hsl(${hue} 52% 72%), hsl(${hue + 18} 46% 52%))`,
-});
+// 장소마다 다른 hue 값을 회사 로고의 빨강~주황~노랑 범위(350°~45°) 안으로 옮겨 쓴다
+export const artStyle = (hue) => {
+  const h = 350 + (((hue % 360) + 360) % 360) * (55 / 360);
+  return {
+    background: `radial-gradient(120% 90% at 85% 10%, hsl(${h + 22} 100% 86%) 0%, transparent 60%), linear-gradient(140deg, hsl(${h + 12} 96% 74%), hsl(${h} 88% 60%))`,
+  };
+};
 
 export function Stars({ value }) {
   if (value == null) return <span className="stars none">후기 없음</span>;
   return <span className="stars">★ {value.toFixed(1)}</span>;
 }
 
-export function VenueCard({ v }) {
+export function VenueCard({ v, i = 0 }) {
   return (
-    <Link to={`/venue/${v.id}`} className="card">
+    <Link to={`/venue/${v.id}`} className="card" style={{ "--i": Math.min(i, 8) }}>
       <div className="card-art" style={artStyle(v.hue)}>
         <span className="card-emoji">{v.emoji}</span>
         {v.badge && <span className="card-badge">{v.badge}</span>}
@@ -50,7 +54,7 @@ export function Carousel({ title, hint, items, action }) {
         </div>
       </div>
       <div className="row-track" ref={ref}>
-        {items.map((v, i) => <VenueCard key={`${v.id}-${v.activityId || i}`} v={v} />)}
+        {items.map((v, i) => <VenueCard key={`${v.id}-${v.activityId || i}`} v={v} i={i} />)}
       </div>
     </section>
   );

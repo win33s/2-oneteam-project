@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { api, setSession } from "../api.js";
+import { ChipStack, ChipBuddy } from "../components/ChipArt.jsx";
 
 /** 1번 화면: 사번·이름·비밀번호 → 2번 화면: 소속 그룹·팀 선택 → 메인 */
 export default function Login({ onDone }) {
@@ -42,7 +43,10 @@ export default function Login({ onDone }) {
 
   return (
     <div className="login">
+      <img className="corp-logo login-corp" src="/sk-hynix-logo.jpg" alt="SK hynix" />
       <aside className="login-brand">
+        <ChipStack className="login-stack" />
+        <ChipBuddy className="login-buddy" color="#FDB515" />
         <div className="login-logo">HBM</div>
         <p className="login-full"><b>H</b>appy <b>B</b>onding <b>M</b>emory</p>
         <ul>

@@ -5,12 +5,12 @@ export const MY_DEPT = "d1";
 export const ME = "e101";
 
 const DEPARTMENTS = [
-  { id: "d1", name: "공정개발2팀", group: "제조기술 담당" },
-  { id: "d2", name: "공정개발1팀", group: "제조기술 담당" },
-  { id: "d3", name: "장비기술팀", group: "제조기술 담당" },
-  { id: "d4", name: "소자설계팀", group: "제품개발 담당" },
-  { id: "d5", name: "수율분석팀", group: "제품개발 담당" },
-  { id: "d6", name: "품질보증팀", group: "제품개발 담당" },
+  { id: "d1", name: "공정개발2팀", group: "R&D" },
+  { id: "d2", name: "공정개발1팀", group: "R&D" },
+  { id: "d3", name: "장비기술팀", group: "R&D" },
+  { id: "d4", name: "소자설계팀", group: "CPO" },
+  { id: "d5", name: "수율분석팀", group: "CPO" },
+  { id: "d6", name: "품질보증팀", group: "CPO" },
 ];
 
 // [이름, 직급, 식이 제한, 음주, 선호 카테고리, 메모]
@@ -35,6 +35,9 @@ const PEOPLE = {
   d5: [["노은채", "사원", [], "조금", [], "조직문화활동 기획 담당"], ["길상우", "팀장", [], "좋아함", [], ""], ["탁재훈", "선임", [], "조금", [], ""], ["소유나", "사원", [], "조금", [], ""]],
   d6: [["여진구", "선임", [], "조금", [], "조직문화활동 기획 담당"], ["봉태규", "팀장", [], "조금", [], ""], ["채수빈", "책임", [], "안 마심", [], ""], ["금보라", "사원", [], "조금", [], ""]],
 };
+
+// 알레르기는 직접 입력 항목이라 예시로 두 명만 넣어 둔다
+const ALLERGY = { 최민준: "땅콩", 임채원: "갑각류" };
 
 const ALL = ["spring", "summer", "autumn", "winter"];
 // f: veg(채식 가능) seafood(해산물 위주) alcohol(술 위주) spicy(매운 메뉴 위주) room(단체석)
@@ -118,7 +121,7 @@ export function buildSeed() {
         deptId: dept.id,
         email: `user${num}@demo-corp.example`,
         isPlanner: i === 0,
-        prefs: { diet, alcohol, likes },
+        prefs: { diet, alcohol, likes, allergy: ALLERGY[name] || "", dietEtc: "" },
       });
     });
   }

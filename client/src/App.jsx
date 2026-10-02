@@ -13,6 +13,7 @@ import Explore from "./pages/Explore.jsx";
 import Mailbox from "./pages/Mailbox.jsx";
 import ReviewForm from "./pages/ReviewForm.jsx";
 import Profile from "./pages/Profile.jsx";
+import GalleryPage from "./pages/GalleryPage.jsx";
 
 const BootContext = createContext(null);
 export const useBoot = () => useContext(BootContext);
@@ -34,6 +35,7 @@ function Shell({ onLogout }) {
 
   return (
     <BootContext.Provider value={{ ...boot, reloadBoot: reload }}>
+      <div className="scroll-progress" aria-hidden="true" />
       <header className="topbar">
         <Link to="/" className="brand">
           <span className="brand-mark">HBM</span>
@@ -56,6 +58,7 @@ function Shell({ onLogout }) {
             <span className="avatar">{boot.me.name[0]}</span>
             <span>{boot.me.name}<small>{boot.dept.name}</small></span>
           </Link>
+          <img className="corp-logo" src="/sk-hynix-logo.jpg" alt="SK hynix" />
         </div>
       </header>
 
@@ -63,6 +66,7 @@ function Shell({ onLogout }) {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/venue/:id" element={<VenuePage />} />
+          <Route path="/gallery/:id" element={<GalleryPage />} />
           <Route path="/plan" element={<PlanPage />} />
           <Route path="/plan/:id" element={<PlanPage />} />
           <Route path="/vote/:id" element={<VotePage />} />
