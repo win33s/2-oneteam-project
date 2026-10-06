@@ -1,548 +1,86 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#e4002b">
-<title>HBM · Happy Bonding Memory</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="assets/deck.css">
-<link rel="stylesheet" href="assets/slides-a.css">
-<link rel="stylesheet" href="assets/slides-b.css">
-<link rel="stylesheet" href="assets/slides-c.css">
-<link rel="stylesheet" href="assets/chrome.css">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#e4002b"><title>HBM — Happy Bonding Memory</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div id="viewport">
-<main id="stage" data-theme="red">
+<header class="toolbar"><a class="brand" href="#1" aria-label="첫 슬라이드">HBM<span>.</span></a><span class="brand-caption">Happy Bonding Memory</span><div class="tools"><label class="opacity-control">UI 농도 <input id="opacity" type="range" min="55" max="100" value="90" aria-label="UI 이미지 불투명도"><output id="opacity-value">90%</output></label><button id="menu" aria-label="목차 열기">목차 <kbd>M</kbd></button><button id="fullscreen" aria-label="전체 화면">전체 화면 <kbd>F</kbd></button></div></header>
+<main id="deck">
+  <section class="slide cover active" data-title="Happy Bonding Memory" aria-label="1. Happy Bonding Memory">
+    <div class="cover-copy"><p class="section-label">조직문화활동 기획 에이전트</p><h1>Happy<br>Bonding<br>Memory<span class="red-dot">.</span></h1><p class="lead">함께한 경험을,<br>다음 기획의 기억으로.</p><button class="primary" data-go="1">HBM 살펴보기 <span>↗</span></button></div>
+    <div class="cover-visual"><div class="back-word" aria-hidden="true">HBM</div><figure class="screen cover-screen"><button class="image-button" data-image="hero" aria-label="HBM 메인 화면 확대"><img src="assets/hero.jpg" alt="HBM의 메인 추천 화면"></button><figcaption><span class="live-dot"></span>우리 팀의 경험이 쌓이는 공간</figcaption></figure><div class="floating-label">기획을 시작하는 순간부터<br><b>다음 담당자를 위한 기록까지</b></div></div>
+    <span class="corner-note">서비스 소개 / 승진하고 싶은 승진팀</span>
+  </section>
 
-<!-- 1 · cover -->
-<section class="slide s-cover" data-id="cover" data-theme="red" data-chrome="min" data-title="표지">
-  <div class="cv-giant" aria-hidden="true">HBM</div>
-  <div class="cv-float" aria-hidden="true">
-    <i style="--x:6%;--y:9%;--w:240px;--t:13s;--b:3px;--r:-8deg"></i>
-    <i style="--x:44%;--y:80%;--w:300px;--t:17s;--b:5px;--r:6deg"></i>
-    <i style="--x:58%;--y:6%;--w:160px;--t:11s;--b:1px;--r:12deg"></i>
-    <i style="--x:2%;--y:84%;--w:190px;--t:15s;--b:2px;--r:-4deg"></i>
-    <i style="--x:86%;--y:88%;--w:220px;--t:19s;--b:6px;--r:-10deg"></i>
-  </div>
-  <div class="cv-copy">
-    <p class="cv-kicker" data-a>조직문화 활동 기획 에이전트</p>
-    <h1 class="cv-title" data-split>Happy Bonding<br>Memory <span class="amber">(HBM)</span></h1>
-    <div class="cv-slot" data-a>
-      <span class="slot"><span class="slot-word in">VWBE하게</span></span>
-      <span class="slot-rest">행복한 조직문화를 기획하세요!</span>
-    </div>
-    <div class="cv-meta" data-a><span class="pill-glass">승진하고 싶은 승진팀</span><span>함께한 경험을, 다음 기획의 기억으로</span></div>
-  </div>
-  <div class="cv-art" data-a="pop">
-    <div class="cv-tilt">
-      <div class="cv-halo"></div>
-      <div class="stack-host" title="눌러 보세요"></div>
-      <div class="buddy-host"></div>
-      <span class="cv-tip">칩을 눌러 보세요 · 쌓아 붙이듯 유대감을 쌓습니다</span>
-    </div>
-  </div>
-  <aside class="notes"><p>안녕하세요. 조직문화활동 기획 에이전트, HBM을 소개합니다.</p><p>먼저 시연 영상으로 전체 흐름을 보여 드리겠습니다.</p></aside>
-</section>
+  <section class="slide demo-slide" data-title="영상으로 보는 HBM" aria-label="2. 영상으로 보는 HBM">
+    <div class="demo-heading"><div><p class="section-label">제품 시연</p><h2>HBM, 실제 흐름으로.</h2></div><a href="https://2-oneteam-project-vxvu.vercel.app/" target="_blank" rel="noopener">웹사이트 열기 ↗</a></div><div class="video-layout"><video id="demo" controls preload="metadata" playsinline poster="assets/hero.jpg"><source src="assets/demo.mp4" type="video/mp4">영상을 재생할 수 없습니다. assets/demo.mp4 파일을 직접 열어 주세요.</video><div class="chapters"><p>보고 싶은 장면부터</p><button data-time="44">00:44 <span>로그인과 팀 선택</span></button><button data-time="55">00:55 <span>메인 추천</span></button><button data-time="96">01:36 <span>날짜와 투표</span></button><button data-time="141">02:21 <span>장소 추천</span></button><button data-time="178">02:58 <span>ERP와 자동 기록</span></button><button data-time="213">03:33 <span>이력과 부서원 선호</span></button><small>제공 영상 4분 20초<br>재생 버튼을 누르면 음성이 나옵니다.</small></div></div>
+  </section>
 
-<!-- 2 · demo video -->
-<section class="slide s-video" data-id="video" data-theme="dark" data-transition="iris" data-title="시연 영상">
-  <div class="vd-head">
-    <span class="kicker" data-a><b>DEMO</b> 시연 영상</span>
-    <h2 class="title" data-split>HBM, 실제 흐름으로</h2>
-    <a href="https://2-oneteam-project-vxvu.vercel.app/" target="_blank" rel="noopener" data-a>웹사이트 열기 ↗</a>
-  </div>
-  <div class="player paused" data-a="blur">
-    <canvas class="ambient" width="64" height="36"></canvas>
-    <div class="frame">
-      <video preload="metadata" playsinline poster="assets/poster.jpg"><source src="assets/demo.mp4" type="video/mp4"></video>
-      <button class="bigplay" aria-label="재생">▶</button>
-      <div class="pctl">
-        <button class="pp" aria-label="재생/일시정지">▶</button>
-        <div class="seek" data-noswipe><div class="rail"></div><div class="ticks"></div><div class="fill"></div></div>
-        <span class="tm">00:00 / 04:20</span>
-        <button class="mute" aria-label="음소거">🔊</button>
-        <button class="vfull" aria-label="영상 전체 화면">⤢</button>
-      </div>
-    </div>
-  </div>
-  <nav class="chapters glass" data-a="right" aria-label="영상 목차"></nav>
-  <p class="vd-foot" data-a>4분 20초 · 오른쪽 목차를 누르면 그 장면부터 재생합니다 · Space 재생/정지</p>
-  <aside class="notes"><p>시연 영상입니다. 로그인부터 추천, 날짜 투표, 장소 추천, ERP 경비 등록과 자동 기록, 에이전트 로그까지 이어집니다.</p><p>오른쪽 목차로 원하는 장면부터 다시 볼 수 있습니다.</p></aside>
-</section>
+  <section class="slide problem" data-title="배경 선정: 기획 담당자의 부담" aria-label="3. 배경 선정: 기획 담당자의 부담">
+  <div class="problem-heading"><p class="section-label">배경 선정 이유</p><h2>모두의 만족과 예산,<br>담당자 혼자<br>고민하고 있습니다.</h2><p class="lead">조직문화행사를 잘 준비해야 한다는 부담.<br>HBM은 그 반복되는 고민을 줄이기 위해 시작했습니다.</p></div>
+  <div class="questions"><button class="question" aria-expanded="false"><span>“구성원들이 만족할까?”</span><small>서로 다른 취향과 기대</small><p>개인 선호와 지난 후기를 참고해 선택의 근거를 만들고, 새로운 활동도 검토할 수 있어야 합니다.</p><b aria-hidden="true">+</b></button><button class="question" aria-expanded="false"><span>“예산 안에서 가능할까?”</span><small>비용과 예산 출처 확인</small><p>이전 경비 기록으로 예상 비용을 살펴보고, 배정 예산에 맞춰 계획을 세우는 부담을 줄입니다.</p><b aria-hidden="true">+</b></button><button class="question" aria-expanded="false"><span>“기록은 어디에 있을까?”</span><small>과거 사례 탐색과 일정 조율</small><p>입사 전 활동과 타부서 사례를 다시 찾는 대신, 모인 기록과 일정을 참고해 기획을 시작합니다.</p><b aria-hidden="true">+</b></button><div class="interaction-hint">질문을 누르면 자세한 배경을 볼 수 있습니다.</div></div>
+  </section>
 
-<!-- 3 · background ① burden -->
-<section class="slide s-problem" data-id="problem" data-theme="light" data-title="배경 ① 담당자의 부담">
-  <i class="blob" style="--c:#ffd9c2;left:1100px;top:-120px;width:620px;height:620px"></i>
-  <i class="blob" style="--c:#ffd0d8;left:-160px;top:700px;width:560px;height:560px;animation-delay:-6s"></i>
-  <div class="pb-copy">
-    <span class="kicker" data-a><b>01</b> 배경 선정 이유</span>
-    <h2 class="title" data-split>조직문화활동 담당자의<br><em>부담</em>, 줄일 수 없을까요?</h2>
-    <p class="lede" data-a>담당자는 주기적으로 바뀝니다. 처음 맡으면 구성원 만족과 예산까지 챙겨야 해 부담이 크고, <b class="em-red">신입이 맡는다면</b> 그 부담은 더 커집니다.</p>
-    <div class="pains" data-a>
-      <div class="pain"><i>📂</i><b>참고할 데이터 부족</b><span>우리 부서 이전 기록조차 쌓여 있지 않음</span></div>
-      <div class="pain"><i>🧭</i><b>어디서, 누구에게?</b><span>어디를 찾아보고 누구에게 물어야 할지 모름</span></div>
-      <div class="pain"><i>🧩</i><b>흩어진 데이터</b><span>경비·일정·후기가 시스템마다 따로</span></div>
-    </div>
-    <button class="btn ink mag btn-stack" data-a><span>HBM으로 쌓아 보기</span> ↯</button>
-  </div>
-  <div class="cloud" aria-label="담당자가 떠올리는 질문들">
-    <div class="cloud-cap"><div class="buddy-host"></div>HBM이 쌓아 주는 답<small>8 layers</small></div>
-    <div class="qp z0" style="--k:0"><div class="q" style="--x:30px;--y:30px;--r:-4deg;--w:400px;--oy:150px;--lc:rgba(228,0,43,.92)"><span class="qq">우리 부서는 전에 뭐 했지?</span><span class="aa">🗂️ 우리 부서 기록 <small>전표 자동 수집</small></span></div></div>
-    <div class="qp z1" style="--k:1"><div class="q" style="--x:460px;--y:0px;--r:3deg;--w:420px;--oy:220px;--lc:rgba(244,123,32,.94)"><span class="qq">이건 누구한테 물어봐야 하지?</span><span class="aa">🙋 앞선 담당자의 코멘트 <small>기록과 함께 남음</small></span></div></div>
-    <div class="qp z0" style="--k:2"><div class="q" style="--x:530px;--y:180px;--r:-2deg;--w:340px;--oy:290px;--lc:rgba(228,0,43,.92)"><span class="qq">어디서 찾아봐야 하지?</span><span class="aa">🧩 흩어진 데이터를 한곳에 <small>ERP·캘린더·후기</small></span></div></div>
-    <div class="qp z2" style="--k:3"><div class="q" style="--x:40px;--y:230px;--r:2deg;--w:380px;--oy:360px;--lc:rgba(244,123,32,.94)"><span class="qq">다른 팀은 어디가 좋았대?</span><span class="aa">⭐ 타부서 레퍼런스 <small>평점·후기</small></span></div></div>
-    <div class="qp z0" style="--k:4"><div class="q" style="--x:280px;--y:360px;--r:-3deg;--w:420px;--oy:430px;--lc:rgba(228,0,43,.92)"><span class="qq">예산 안에서 다 만족할 곳은?</span><span class="aa">📍 근거 있는 장소 추천 <small>예산·선호</small></span></div></div>
-    <div class="qp z1" style="--k:5"><div class="q" style="--x:600px;--y:470px;--r:4deg;--w:290px;--oy:500px;--lc:rgba(244,123,32,.94)"><span class="qq">다들 언제 시간 돼?</span><span class="aa">📅 날짜 후보·메일 투표 <small>연차·과제 일정</small></span></div></div>
-    <div class="qp z1" style="--k:6"><div class="q" style="--x:20px;--y:520px;--r:-2deg;--w:370px;--oy:570px;--lc:rgba(228,0,43,.92)"><span class="qq">예약·안내·경비 처리는?</span><span class="aa">🧾 예약·안내·ERP 자동 기록 <small>바로 연결</small></span></div></div>
-    <div class="qp z0" style="--k:7"><div class="q" style="--x:360px;--y:620px;--r:2deg;--w:340px;--oy:640px;--lc:rgba(244,123,32,.94)"><span class="qq">후기는 누가 모으지?</span><span class="aa">📝 사후 설문 발송 <small>다음 추천에 반영</small></span></div></div>
-    <div class="cloud-shadow"></div>
-  </div>
-  <aside class="notes"><p>조직문화활동 담당자는 주기적으로 바뀝니다. 처음 맡으면 구성원 만족과 예산까지 챙겨야 해서 부담이 크고, 신입이 맡게 되면 그 부담은 더 커집니다.</p><p>참고할 데이터도 부족합니다. 우리 부서의 이전 기록조차 쌓여 있지 않은 경우가 많고, 어디를 찾아보고 누구에게 물어봐야 할지도 모릅니다. 필요한 데이터는 여러 시스템에 흩어져 있습니다.</p><p>(버튼) 담당자가 떠올리는 질문들이 HBM에서 어떤 기능으로 쌓이는지 보여 줍니다.</p></aside>
-</section>
+  <section class="slide strategy" data-title="배경 선정: 기존 데이터를 다시 활용" aria-label="4. 배경 선정: 기존 데이터를 다시 활용">
+  <div class="strategy-heading"><p class="section-label">배경 선정 이유</p><h2>이미 남긴 경비 기록을<br>다음 기획에 활용합니다.</h2><p class="lead">행사가 끝나도 기록의 쓰임은 계속됩니다.</p></div>
+  <div class="strategy-columns"><article><h3>지금 남아 있는 정보</h3><p>경비 처리 서류에는 방문 장소, 소비 내역, 금액과 예산 출처가 남습니다. 담당자는 이를 다음 행사의 비용과 장소를 판단하는 자료로 활용할 수 있습니다.</p></article><article><h3>AI가 참고할 데이터</h3><p>기존 데이터베이스를 정리해 추천의 근거로 활용하고, 후기를 쌓아 이후 추천을 개선합니다. 충분한 데이터가 확보되면 AI 학습 자료로 확장할 수 있습니다.</p></article></div>
+  <div class="statement"><strong>기록 기반으로 다음 계획을 세우는 구조</strong><p>현재 데모는 가상 데이터를 조회해 추천합니다. 실제 기업 데이터로 모델을 학습한 상태는 아닙니다.</p></div>
+  </section>
 
-<!-- 4 · background ② scattered data, combined -->
-<section class="slide s-data" data-id="data" data-theme="light" data-title="배경 ② 흩어진 데이터">
-  <i class="blob" style="--c:#ffe3b8;left:1200px;top:600px;width:560px;height:560px"></i>
-  <div class="dt-copy">
-    <span class="kicker" data-a><b>01</b> 배경 선정 이유</span>
-    <h2 class="title" data-split>흩어진 데이터를,<br><em>하나로 합치면</em></h2>
-    <p class="lede" data-a>경비 전표는 ERP에, 일정은 캘린더에, 후기와 단체 사진은 메일과 사내 블로그에 흩어져 있습니다. 이미 있는 데이터를 모아 AI가 학습하면, 다음 계획의 근거가 됩니다.</p>
-    <button class="btn soft mag dt-replay" data-a>↺ 데이터 다시 모으기</button>
-    <p class="dt-note" data-a>※ 예시 데이터와 결과는 데모용 가상 데이터입니다.</p>
-  </div>
-  <div class="receipts">
-    <div class="rcpt" style="--i:0;--x:820px;--y:250px;--r:-4deg"><header><span class="from">ERP 경비 전표</span><span>2026.09.04</span></header><b>화로담 숯불갈비</b><div class="row"><span>공정개발2팀 · 6명</span><strong>230,400원</strong></div></div>
-    <div class="rcpt" style="--i:1;--x:860px;--y:362px;--r:3deg"><header><span class="from">캘린더</span><span>2026년 10월</span></header><b>부서원 6명 일정</b><div class="row"><span>연차 2건 · 분기 과제 리뷰</span><strong>14~16일</strong></div></div>
-    <div class="rcpt" style="--i:2;--x:810px;--y:474px;--r:-2deg"><header><span class="from">참석자 후기</span><span>타부서 15건</span></header><b>스트라이크 볼링센터</b><div class="row"><span>"다 같이 하기 좋아요"</span><strong>★ 4.5</strong></div></div>
-    <div class="rcpt" style="--i:3;--x:870px;--y:586px;--r:4deg"><header><span class="from">사내 블로그</span><span>동아리 게시글</span></header><b>돌밥상 이천쌀밥 한정식</b><div class="row"><span>단체 사진</span><strong>6건</strong></div></div>
-    <div class="rcpt" style="--i:4;--x:820px;--y:698px;--r:-3deg"><header><span class="from">ERP 경비 전표</span><span>2025.10.23</span></header><b>솥뚜껑 닭볶음탕</b><div class="row"><span>품질보증팀 · 7명</span><strong>184,800원</strong></div></div>
-    <div class="rcpt" style="--i:5;--x:860px;--y:810px;--r:2deg"><header><span class="from">부서원 선호</span><span>프로필</span></header><b>식이 제한·음주·활동</b><div class="row"><span>복숭아 알레르기 1명</span><strong>채식 1명</strong></div></div>
-  </div>
-  <p class="dt-pile">흩어져 있던 데이터</p>
-  <i class="dt-arrow" style="left:1192px;width:58px"></i>
-  <div class="dt-chip" data-a="pop"><div class="stack-host"></div><span>모아서 학습·분석</span></div>
-  <i class="dt-arrow" style="left:1466px;width:30px"></i>
-  <div class="outs">
-    <div class="dt-out"><small>많이 방문한 곳</small><b>화로담 숯불갈비</b><span>우리 부서 4회 · 1인 38,400원</span></div>
-    <div class="dt-out"><small>후기가 좋았던 곳</small><b>스트라이크 볼링센터</b><span>타부서 평점 1위 · ★4.5</span></div>
-    <div class="dt-out"><small>이 계절에 자주 간 곳</small><b>솥뚜껑 닭볶음탕</b><span>가을에 3번 방문</span></div>
-    <div class="dt-out"><small>다음 계획의 기준</small><b>날짜 · 예산 · 선호</b><span>모두 되는 날, 1인 예산, 식이 제한</span></div>
-  </div>
-  <aside class="notes"><p>필요한 데이터는 사실 이미 회사 안에 있습니다. 다만 경비 전표는 ERP에, 일정은 캘린더에, 후기와 단체 사진은 메일과 사내 블로그에 흩어져 있어서 담당자가 하나하나 찾아야 합니다.</p><p>이 흩어진 기존 데이터를 합쳐 AI가 학습하면, 우리 부서 기록이 없어도 다음 계획의 근거를 만들 수 있고, 새로운 가치를 만들 수 있다고 봤습니다.</p></aside>
-</section>
+  <section class="slide identity" data-title="HBM의 의미" aria-label="5. HBM의 의미">
+    <div class="identity-top"><p class="section-label">Happy Bonding Memory</p><h2>유대감을 쌓고,<br>기억을 남깁니다.</h2></div>
+    <div class="identity-layout"><figure class="screen"><button class="image-button" data-image="login" aria-label="로그인 화면 확대"><img src="assets/login.jpg" alt="빨강 HBM 브랜딩과 로그인 UI"></button><figcaption>사번으로 시작하고, 소속 팀의 기록으로 연결합니다.</figcaption></figure><div class="definitions"><article><span>B</span><div><h3>Bonding</h3><p>칩을 쌓아 붙이듯,<br>부서원 사이의 유대감을 쌓습니다.</p></div></article><article><span>M</span><div><h3>Memory</h3><p>우리가 만드는 메모리처럼,<br>함께한 기억과 기획 이력을 남깁니다.</p></div></article></div></div>
+  </section>
 
-<!-- 5 · name -->
-<section class="slide s-name" data-id="name" data-theme="dark" data-transition="zoom" data-title="HBM 이름의 뜻">
-  <div class="nm-grid"></div>
-  <div class="nm-head">
-    <span class="kicker" data-a><b>HBM</b> 이름의 뜻</span>
-    <h2 class="title" data-split>칩을 쌓듯, <em>유대감</em>을 쌓습니다</h2>
-    <p class="lede" data-a style="max-width:1100px">Happy Bonding Memory — 칩을 쌓아 붙이듯 유대감을 쌓고, 그 기억을 기록으로 남긴다는 뜻입니다.</p>
-  </div>
-  <div class="nm-stack" data-a>
-    <i class="tsv" style="left:120px"></i><i class="tsv" style="left:280px"></i><i class="tsv" style="left:440px"></i><i class="tsv" style="left:600px"></i>
-    <button class="die d-h" data-k="h" data-word="Happy" data-title="즐거운 조직문화" data-desc="처음 맡은 담당자도, 신입도 부담 없이. 함께하는 부서원은 즐겁게. 막막한 준비 과정을 에이전트가 함께합니다."><b>H</b><span>Happy</span><div class="buddy-host"></div><small>행복</small></button>
-    <button class="die d-b" data-k="b" data-word="Bonding" data-title="유대감을 쌓다" data-desc="칩을 쌓아 붙이듯, 부서원 사이의 유대감을 쌓습니다."><b>B</b><span>Bonding</span><small>유대감</small></button>
-    <button class="die d-m" data-k="m" data-word="Memory" data-title="기억을 남기다" data-desc="우리가 만드는 메모리처럼, 조직문화활동의 기억과 방문·기획 이력을 기록으로 남깁니다."><b>M</b><span>Memory</span><small>기억</small></button>
-    <div class="die base"><span>우리 부서의 기록 · 경비 전표 · 후기</span></div>
-  </div>
-  <div class="nm-panel glass" data-a="right">
-    <div class="np-letter">H</div>
-    <div class="np-word np-anim">Happy</div>
-    <div class="np-title np-anim">즐거운 조직문화</div>
-    <p class="np-desc np-anim">처음 맡은 담당자도, 신입도 부담 없이. 함께하는 부서원은 즐겁게.</p>
-    <p class="np-foot">SK하이닉스의 HBM(High Bandwidth Memory)은 D램을 수직으로 쌓아 올린 메모리입니다. 우리의 HBM은 부서의 경험을 차곡차곡 쌓습니다.</p>
-  </div>
-  <aside class="notes"><p>HBM은 Happy Bonding Memory의 줄임말입니다.</p><p>칩을 쌓아 붙이듯 유대감을 쌓고, 그 기억을 기록으로 남긴다는 뜻입니다.</p></aside>
-</section>
+  <section class="slide strategy core-summary" data-title="Agent 핵심 기능 한눈에 보기" aria-label="6. Agent 핵심 기능 한눈에 보기">
+  <div class="strategy-heading"><p class="section-label">Agent의 핵심 기능</p><h2>일정과 인원을 입력하면,<br>준비부터 후속 업무까지 연결합니다.</h2></div>
+  <div class="capability-grid"><article><span>01</span><h3>날짜 후보와 투표</h3><p>대략적인 일정과 인원을 받아 연차·과제 일정을 확인하고, 후보 날짜와 투표를 만듭니다.</p></article><article><span>02</span><h3>근거가 있는 추천</h3><p>경비 이력과 후기로 자주 방문한 곳, 반응이 좋았던 곳을 선별하고 팀의 예산·선호를 반영합니다.</p></article><article><span>03</span><h3>확정 이후의 실행</h3><p>예약 페이지로 연결하고 참석 안내와 사후 설문을 준비합니다. 모인 후기는 다음 추천에 반영합니다.</p></article></div>
+  <div class="statement"><strong>테스트 환경에서 흐름을 시연</strong><p>가상 경비·후기로 날짜와 장소를 추천하고, 데모 메일함에서 투표·안내·설문 발송을 확인합니다. 예약은 외부 페이지 연결 단계까지 구현했습니다.</p></div>
+  </section>
 
-<!-- 6 · core features overview -->
-<section class="slide s-flow" data-id="flow" data-theme="light" data-title="핵심 기능 한눈에">
-  <i class="blob" style="--c:#ffd9c2;left:1000px;top:200px;width:700px;height:700px"></i>
-  <div class="fl-copy">
-    <span class="kicker" data-a><b>02</b> Agent 핵심 기능</span>
-    <h2 class="title" data-split>기획부터 기록까지,<br><em>한 번의 흐름</em></h2>
-    <ol class="pillars" data-a>
-      <li data-p="0"><i>1</i><div><b>경비 데이터로 장소 선별</b><span>많이 방문한 곳 · 후기가 좋았던 곳</span></div></li>
-      <li data-p="1"><i>2</i><div><b>일정·인원 입력 → 날짜 투표 → 장소 추천</b><span>연차·과제 일정, 경비 이력·후기 참고</span></div></li>
-      <li data-p="2"><i>3</i><div><b>예약·안내·사후 설문 → 다음 추천</b><span>수집한 후기를 다음 추천에 반영</span></div></li>
-    </ol>
-    <p class="fl-note" data-a>바깥 원은 HBM이 한곳에 모으는 흩어진 사내 데이터입니다. 데모는 가상 데이터·테스트 환경에서 투표 생성·예약·안내·설문 발송까지 수행합니다. 원을 누르면 해당 장면으로 이동합니다.</p>
-  </div>
-  <div class="fl-ring" data-a="blur">
-    <svg class="fl-svg" viewBox="0 0 900 900" aria-hidden="true">
-      <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fdb515"/><stop offset=".5" stop-color="#f47b20"/><stop offset="1" stop-color="#e4002b"/></linearGradient></defs>
-      <circle class="ring-base" cx="450" cy="450" r="300"/>
-      <circle class="ring-trail" cx="450" cy="450" r="300"/>
-      <circle class="ring-dot" cx="450" cy="150" r="12"/>
-    </svg>
-    <div class="orbit" aria-hidden="true">
-      <span style="--a:10deg"><i>ERP 경비 전표</i></span><span style="--a:62deg"><i>캘린더·연차</i></span><span style="--a:114deg"><i>과제 일정</i></span><span style="--a:166deg"><i>조직도</i></span><span style="--a:218deg"><i>사내 메일</i></span><span style="--a:270deg"><i>날씨</i></span><span style="--a:322deg"><i>사내 블로그</i></span>
-    </div>
-    <div class="fl-core"><div class="buddy-host"></div><b>Memory Loop</b><span>흩어진 데이터 → 다음 기획</span></div>
-    <button class="node" style="--a:-90deg" data-goto="7"><span class="num">1</span><em>🏠</em><b>첫 화면 추천</b></button>
-    <button class="node" style="--a:-30deg" data-goto="8"><span class="num">2</span><em>✍️</em><b>한 줄 기획</b></button>
-    <button class="node" style="--a:30deg" data-goto="9"><span class="num">3</span><em>📅</em><b>날짜·투표</b></button>
-    <button class="node" style="--a:90deg" data-goto="11"><span class="num">4</span><em>📍</em><b>장소 추천</b></button>
-    <button class="node" style="--a:150deg" data-goto="12"><span class="num">5</span><em>🧾</em><b>예약·안내·설문</b></button>
-    <button class="node" style="--a:210deg" data-goto="13"><span class="num">6</span><em>📚</em><b>기록·후기 반영</b></button>
-  </div>
-  <aside class="notes"><p>HBM의 핵심 기능은 세 가지입니다.</p><p>첫째, 지난 경비 데이터로 많이 방문한 곳과 후기가 좋았던 곳을 선별합니다. 둘째, 대략적인 일정과 인원을 입력하면 연차·과제 일정으로 날짜 후보와 투표를 만들고, 경비 이력과 후기를 참고해 장소와 활동을 추천합니다. 셋째, 확정 후 예약·안내·사후 설문으로 이어지고, 수집된 후기는 다음 추천에 반영됩니다.</p></aside>
-</section>
+  <section class="slide feature" data-title="첫 화면에서 발견하는 추천" aria-label="7. 첫 화면에서 발견하는 추천">
+    <div class="feature-copy"><p class="section-label">발견</p><h2>어디로 갈지,<br>첫 화면에서<br>힌트를 얻습니다.</h2><p>우리 팀의 이력과 다른 팀의 경험을<br>장소 카드와 짧은 추천 이유로 보여 줍니다.</p><div class="tab-list" role="tablist" aria-label="추천 화면"><button role="tab" aria-selected="true" data-panel="discover" data-src="hero" data-caption="문장 한 줄로 기획을 시작하는 메인 화면">메인 화면</button><button role="tab" aria-selected="false" data-panel="discover" data-src="home" data-caption="평점과 계절별 추천을 카드 아래 한 줄로 설명합니다">추천 카드</button></div><p class="micro">평점 / 계절 / 방문 이력 / 새로운 선택지</p></div>
+    <div class="feature-media"><figure class="screen tilted" id="discover" role="tabpanel"><button class="image-button" data-image="hero" aria-label="추천 화면 확대"><img src="assets/hero.jpg" alt="메인 추천 화면"></button><figcaption>문장 한 줄로 기획을 시작하는 메인 화면</figcaption></figure><div class="glass-tag"><span>추천 이유까지 한눈에</span><strong>“타부서 평점 TOP 1!”</strong></div></div>
+  </section>
 
-<!-- 7 · recommendations -->
-<section class="slide s-recs" data-id="recs" data-theme="light" data-title="① 경비 데이터로 장소 선별">
-  <div class="ghost" style="background-image:url(assets/ui/home.jpg)"></div>
-  <div class="rc-head">
-    <div>
-      <span class="kicker" data-a><b>02</b> 핵심 기능 ① 장소 선별</span>
-      <h2 class="title" data-split>경비 데이터로,<br><em>갈 곳</em>을 고릅니다</h2>
-    </div>
-    <p class="lede" data-a>지난 조직문화활동 경비 전표를 모았습니다. 우리 부서 기록이 없어도 타부서 데이터로 많이 방문한 곳, 후기가 좋았던 곳, 이 계절에 자주 찾은 곳, 새로운 곳을 첫 화면에서 바로 보여 줍니다.</p>
-  </div>
-  <div class="rc-bar" data-a>
-    <div class="chips"><button class="on" data-f="all">전체 추천</button><button data-f="mine">우리 부서 최근</button><button data-f="others">타부서 평점</button><button data-f="season">가을 시즌</button><button data-f="photo">단체 사진</button><button data-f="new">새로운 곳</button></div>
-    <div class="arrows"><button data-dir="-1" aria-label="이전 카드">←</button><button data-dir="1" aria-label="다음 카드">→</button></div>
-  </div>
-  <div class="track" data-noswipe></div>
-  <div class="rc-legend" data-a>
-    <div class="lg" data-hl="icon"><span class="dots"><i class="tone-food"></i><i class="tone-act"></i><i class="tone-new"></i></span><b>카드의 색</b> = 범주 (식당·카페 / 활동 / 새로운 곳)</div>
-    <div class="lg" data-hl="reason"><span class="line"></span><b>아래 한 줄</b> = 추천 이유</div>
-    <div class="lg plain">카드를 끌어서 넘겨 보세요 · 장소·평점·금액은 데모용 가상 데이터</div>
-  </div>
-  <aside class="notes"><p>첫 화면에는 추천 장소가 바로 나타납니다. 우리 부서가 최근 다녀온 곳, 다른 부서에서 평점이 높았던 곳, 이 계절에 자주 찾은 곳, 아직 덜 알려진 새로운 곳입니다.</p><p>ERP에 등록된 지난 경비 전표를 수집해 반영한 결과이고, 카드의 색은 범주를, 아래 한 줄은 추천 이유를 알려 줍니다.</p></aside>
-</section>
+  <section class="slide calendar-slide" data-title="일정 확인과 날짜 투표" aria-label="8. 일정 확인과 날짜 투표">
+    <div class="wide-heading"><div><p class="section-label">조율</p><h2>달력에서 확인하고,<br>투표로 함께 정합니다.</h2></div><p>개인 일정과 중요한 과제 일정을 확인합니다.<br>후보 날짜를 메일로 보내고, 응답을 모아 확정합니다.</p></div>
+    <div class="calendar-layout"><figure class="screen" id="dates" role="tabpanel"><button class="image-button" data-image="calendar" aria-label="일정 화면 확대"><img src="assets/calendar.jpg" alt="참석 가능 여부가 색으로 구분된 달력"></button><figcaption>일정별 참석 가능 여부와 주의가 필요한 날짜를 확인</figcaption></figure><div class="side-steps" role="tablist" aria-label="일정 진행 단계"><button role="tab" aria-selected="true" data-panel="dates" data-src="calendar" data-caption="일정별 참석 가능 여부와 주의가 필요한 날짜를 확인"><span>01</span><div><h3>가능한 날짜 확인</h3><p>부서원 캘린더와 과제 일정</p></div></button><button role="tab" aria-selected="false" data-panel="dates" data-src="vote" data-caption="투표 결과를 반영한 달력에서 활동 날짜를 확정"><span>02</span><div><h3>후보 날짜 투표</h3><p>메일 응답을 모아 결과 확인</p></div></button><button role="tab" aria-selected="false" data-panel="dates" data-src="mail" data-caption="확정한 날짜와 장소를 참석자에게 안내"><span>03</span><div><h3>확정 내용 안내</h3><p>날짜와 장소를 한 번에 전달</p></div></button></div></div>
+  </section>
 
-<!-- 8 · plan in one sentence -->
-<section class="slide s-plan" data-id="plan" data-theme="light" data-title="② 한 줄 기획">
-  <i class="blob" style="--c:#ffe1c9;left:-120px;top:-160px;width:640px;height:640px"></i>
-  <div class="pl-copy">
-    <span class="kicker" data-a><b>02</b> 핵심 기능 ② 기획 시작</span>
-    <h2 class="title" data-split>일정과 인원만,<br><em>문장 한 줄</em>로</h2>
-    <p class="lede" data-a>대략적인 일정과 인원을 입력하면 에이전트가 유형·예산·기간을 읽어 조건을 채웁니다.</p>
-  </div>
-  <figure class="pl-shotwrap" data-a="right">
-    <div class="shot crop" style="--cx:280;--cy:240;--cw:1040;--ch:660"><div class="bar"><i></i><i></i><i></i><span>새 활동 기획 · 조건과 참석 대상</span></div><div class="vp"><img src="assets/ui/plan.jpg" alt="활동 조건과 사내 조직도에서 참석 대상을 고르는 화면"></div></div>
-    <figcaption>참석 대상은 사내 조직도에서 선택</figcaption>
-  </figure>
-  <form class="ask" data-a="pop" autocomplete="off">
-    <input id="ask-in" placeholder="예) 다음 달에 2만원대로 몸 쓰는 활동 하고 싶어" aria-label="기획 문장 입력">
-    <button type="submit">기획 시작</button>
-  </form>
-  <div class="examples" data-a>
-    <button type="button">이번 달 3만원대 회식 장소 추천해 줘</button>
-    <button type="button">다음 달에 2만원대로 몸 쓰는 활동 하고 싶어</button>
-    <button type="button">11월에 8명 문화 활동 2만원 이내</button>
-    <span>직접 입력해도 됩니다 · Enter</span>
-  </div>
-  <div class="cond glass" data-a>
-    <div class="cond-top">
-      <b>활동 조건</b><span class="agent-tag">에이전트가 채움</span>
-      <div class="types"><span data-t="상관없음">상관없음</span><span data-t="식당·회식">식당·회식</span><span data-t="게임·액티비티">게임·액티비티</span><span data-t="문화·클래스">문화·클래스</span><span data-t="숙소·워크숍">숙소·워크숍</span><span data-t="카페">카페</span></div>
-    </div>
-    <div class="fields">
-      <div class="fd empty" data-k="from"><label>언제부터</label><b>—</b></div>
-      <div class="fd empty" data-k="to"><label>언제까지</label><b>—</b></div>
-      <div class="fd empty" data-k="time"><label>시간대</label><b>—</b></div>
-      <div class="fd empty" data-k="budget"><label>1인 예산</label><b>—</b></div>
-      <div class="fd empty" data-k="people"><label>인원</label><b>—</b></div>
-    </div>
-  </div>
-  <aside class="notes"><p>기획은 문장 한 줄로 시작합니다.</p><p>원하는 내용을 입력하면, 에이전트가 유형과 예산, 기간을 읽어 조건을 채워 줍니다. 참석 대상은 사내 조직도에서 선택합니다.</p></aside>
-</section>
+  <section class="slide feature" data-title="근거가 보이는 장소 추천" aria-label="9. 근거가 보이는 장소 추천">
+    <div class="feature-copy"><p class="section-label">선택</p><h2>추천 점수보다<br>중요한 건,<br>추천하는 이유.</h2><p>경비 전표와 후기, 방문 이력에<br>날씨와 부서원 선호를 함께 고려합니다.</p><div class="tab-list" role="tablist" aria-label="추천 근거 화면"><button role="tab" aria-selected="true" data-panel="reasons" data-src="venue" data-caption="점수와 함께 경비 기록, 후기 등 추천의 근거를 확인">추천 근거</button><button role="tab" aria-selected="false" data-panel="reasons" data-src="profile" data-caption="식이 제한과 음주, 좋아하는 활동을 한 화면에서 관리">부서원 선호</button></div><div class="editorial-note">익숙한 단골과 새로운 장소를<br>함께 비교할 수 있도록.</div></div><div class="feature-media"><figure class="screen" id="reasons" role="tabpanel"><button class="image-button" data-image="venue" aria-label="장소 추천 근거 확대"><img src="assets/venue.jpg" alt="경비 전표를 근거로 설명하는 장소 추천 화면"></button><figcaption>점수와 함께 경비 기록, 후기 등 추천의 근거를 확인</figcaption></figure></div>
+  </section>
 
-<!-- 9 · dates -->
-<section class="slide s-cal" data-id="cal" data-theme="light" data-title="② 날짜 후보">
-  <div class="ghost g-left" style="background-image:url(assets/ui/calendar.jpg)"></div>
-  <div class="ca-copy">
-    <span class="kicker" data-a><b>02</b> 핵심 기능 ② 날짜 후보</span>
-    <h2 class="title" data-split>연차·과제 일정으로,<br><em>모두 되는 날</em>을</h2>
-    <p class="lede" data-a style="font-size:25px">부서원 캘린더와 연차·과제 일정을 확인해 달력에 색으로 표시합니다. 어려운 날을 고르면 사유를 보여 주고 한 번 더 확인합니다.</p>
-    <ul class="legend" data-a>
-      <li class="ok"><i></i><b>초록</b> 전원 가능 (추천 ★)</li>
-      <li class="mid"><i></i><b>노랑</b> 일부 불참·주의 일정</li>
-      <li class="no"><i></i><b>빨강</b> 불참 많음·중요 과제 일정</li>
-    </ul>
-  </div>
-  <div class="ca-side glass" data-a>
-    <b>투표로 정하기</b>
-    <p>고른 후보 <em class="cnt">3</em>개를 부서원 6명에게 메일로 보냅니다.</p>
-    <div class="cands"></div>
-    <button class="btn red send mag">고른 날짜로 투표 메일 보내기 ✉️</button>
-  </div>
-  <div class="ca-card glass" data-a="right">
-    <div class="ca-top"><b>날짜 고르기</b><span>2026년 10월 · 공정개발2팀 6명 · 날짜를 눌러 보세요</span></div>
-    <div class="ca-week"><span class="sun">일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span class="sat">토</span></div>
-    <div class="ca-grid"></div>
-  </div>
-  <div class="modal" hidden><div class="mbox"></div></div>
-  <aside class="notes"><p>에이전트는 부서원 캘린더와 과제 일정을 확인해 달력에 색으로 표시합니다.</p><p>모두 가능한 날은 초록, 일부가 어려운 날은 노랑, 불참이 많거나 중요한 과제 일정과 겹치는 날은 빨강입니다. 어려운 날을 선택하면 사유를 보여 주고 한 번 더 확인합니다.</p><p>후보가 여러 개라면 투표로 정합니다. 날짜를 골라 버튼을 누르면 부서원에게 투표 메일이 발송됩니다.</p></aside>
-</section>
+  <section class="slide automation" data-title="ERP 전표가 활동 기록으로" aria-label="10. ERP 전표가 활동 기록으로">
+    <div class="wide-heading"><div><p class="section-label">기록</p><h2>경비를 올리면,<br>활동의 기억이 쌓입니다.</h2></div><p>담당자는 평소처럼 전표를 등록합니다.<br>에이전트는 기록을 모으고 후속 작업을 돕습니다.</p></div><div class="automation-layout"><div class="flow-tabs" role="tablist" aria-label="ERP 자동 기록 단계"><button role="tab" aria-selected="true" data-panel="erp-flow" data-src="erp" data-caption="ERP의 전표 목록에서 활동 경비를 확인합니다"><span>1</span><h3>전표 등록</h3><p>경비 코드, 품목, 용도와 예산 출처</p></button><button role="tab" aria-selected="false" data-panel="erp-flow" data-src="record" data-caption="전표 감지 후 기록 업데이트와 후기 요청 메일을 확인합니다"><span>2</span><h3>기록과 알림</h3><p>부서 이력 등록과 담당자 알림</p></button><button role="tab" aria-selected="false" data-panel="erp-flow" data-src="history" data-caption="누적된 기록은 다른 부서와 다음 담당자의 레퍼런스가 됩니다"><span>3</span><h3>다음 기획의 자료</h3><p>코멘트와 후기로 경험 보완</p></button><p class="micro">후기 폼은 담당자가 발송을 선택한 경우에 전송합니다.</p></div><figure class="screen" id="erp-flow" role="tabpanel"><button class="image-button" data-image="erp" aria-label="ERP 흐름 화면 확대"><img src="assets/erp.jpg" alt="ERP 경비 전표 목록"></button><figcaption>ERP의 전표 목록에서 활동 경비를 확인합니다</figcaption></figure></div>
+  </section>
 
-<!-- 10 · vote -->
-<section class="slide s-vote" data-id="vote" data-theme="light" data-title="② 메일 투표">
-  <i class="blob" style="--c:#ffd9c2;left:1300px;top:-100px;width:560px;height:560px"></i>
-  <div class="vo-copy">
-    <span class="kicker" data-a><b>02</b> 핵심 기능 ② 투표</span>
-    <h2 class="title" data-split>후보가 여럿이면,<br><em>메일로 투표</em></h2>
-    <p class="lede" data-a style="font-size:25px">메일 안에서 바로 투표하고, 응답은 들어오는 대로 달력에 반영됩니다. 표가 가장 많은 날로 확정합니다.</p>
-    <ol class="steps sdeck-ctrl" data-for="vote-deck" data-a>
-      <li data-go="0"><i>1</i><b>투표 메일 도착</b><span>에이전트가 부서원 6명에게 발송</span></li>
-      <li data-go="1"><i>2</i><b>메일에서 바로 투표</b><span>가능한 날짜를 모두 선택</span></li>
-      <li data-go="2"><i>3</i><b>실시간 반영 후 확정</b><span>가장 많은 표를 받은 날</span></li>
-    </ol>
-  </div>
-  <div class="sdeck" id="vote-deck" data-a="fade">
-    <figure class="shot"><div class="bar"><i></i><i></i><i></i><span>메일함 · 에이전트가 보낸 메일</span></div><div class="vp"><img src="assets/ui/votemail.jpg" alt="메일함에 도착한 투표 메일"></div></figure>
-    <figure class="shot"><div class="bar"><i></i><i></i><i></i><span>날짜 투표</span></div><div class="vp"><img src="assets/ui/votepage.jpg" alt="메일에서 열리는 날짜 투표 화면"></div></figure>
-    <figure class="shot"><div class="bar"><i></i><i></i><i></i><span>투표 결과가 반영된 달력</span></div><div class="vp"><img src="assets/ui/votelive.jpg" alt="투표 결과가 실시간으로 반영된 달력"></div></figure>
-  </div>
-  <div class="pings"></div>
-  <div class="board glass" data-a="right">
-    <div class="bd-head"><b>10월 조직문화활동 · 날짜 투표</b><span class="live">LIVE</span><span class="resp">응답 <em>0</em>/6</span></div>
-    <div class="rows"></div>
-    <div class="bd-foot"><button class="btn soft sm replay">↺ 다시 받기</button><button class="btn red sm confirm" disabled>이 날로 확정</button></div>
-    <div class="stamp">확정</div>
-  </div>
-  <aside class="notes"><p>메일함을 열어 보면 투표 메일이 도착해 있고, 메일 안에서 바로 투표할 수 있습니다.</p><p>응답은 들어오는 대로 달력에 실시간으로 반영됩니다. 표가 가장 많은 날로 확정합니다.</p></aside>
-</section>
+  <section class="slide memory" data-title="다음 담당자를 위한 기억" aria-label="11. 다음 담당자를 위한 기억">
+    <div class="memory-copy"><p class="section-label">공유</p><h2>한 번의 활동이<br>다음 담당자의<br>출발점으로.</h2><p class="lead">언제, 어디서, 얼마를 썼는지.<br>무엇이 좋았고, 무엇을 주의해야 하는지.</p><p>팀이 바뀌어도, 담당자가 바뀌어도<br>기록을 찾아보고 다음 선택에 활용합니다.</p></div><figure class="screen memory-screen"><button class="image-button" data-image="history" aria-label="타부서 레퍼런스 확대"><img src="assets/history.jpg" alt="시기, 부서, 장소, 평점, 경비가 정리된 타부서 레퍼런스"></button><figcaption>타부서 레퍼런스 / 시기와 유형으로 찾아보는 활동 이력</figcaption></figure>
+  </section>
 
-<!-- 11 · venue -->
-<section class="slide s-venue" data-id="venue" data-theme="light" data-title="② 장소·활동 추천">
-  <svg class="links" aria-hidden="true"></svg>
-  <div class="vn-head">
-    <span class="kicker" data-a><b>02</b> 핵심 기능 ② 장소·활동 추천</span>
-    <h2 class="title" data-split>추천 점수보다 중요한 건, <em>추천하는 이유</em></h2>
-  </div>
-  <div class="sources" data-a="left">
-    <div class="src"><i>🧾</i><div><b>경비 기록</b><span>이맘때 우리 부서·타부서 전표</span></div></div>
-    <div class="src"><i>⭐</i><div><b>참석자 후기</b><span>평점·코멘트</span></div></div>
-    <div class="src"><i>📸</i><div><b>단체 사진</b><span>사내 블로그·동아리 게시글</span></div></div>
-    <div class="src"><i>☀️</i><div><b>그날의 날씨</b><span>10월 8일(목) 맑음 14°C</span></div></div>
-    <div class="src"><i>🥗</i><div><b>식이 제한·선호</b><span>알레르기·음주·좋아하는 활동</span></div></div>
-    <div class="src"><i>💰</i><div><b>예산</b><span>1인 30,000원 이내</span></div></div>
-  </div>
-  <div class="agent-box" data-a>
-    <span class="wx">10월 8일(목) 예보 ☀️ 맑음 14°C · 야외 활동도 괜찮습니다</span>
-    <span class="who">에이전트</span>
-    <p>가장 권하는 곳은 솥뚜껑 닭볶음탕입니다. 근거: 가을에 3번 방문 (우리·타부서 전표 합산), 후기 평점 4.3점 (10건). 확인할 점: 채식 메뉴 부족 (김지우). 늘 가던 곳이 아닌 새로운 것을 원하면 아직 덜 알려진 온기 샤브샤브도 있습니다.</p>
-  </div>
-  <article class="rec r1" data-a>
-    <div class="rec-art pink"><em>1</em>🍲</div>
-    <div class="rec-body"><small>한식 · 이천 대월면</small><h4>솥뚜껑 닭볶음탕</h4><div class="mt"><span class="star">★ 4.3</span><span>1인 평균 26,400원</span><span>2개 부서 방문</span></div>
-      <div class="score"><label>추천도</label><div class="sb"><i></i></div><b><span>78</span><small>점</small></b></div></div>
-  </article>
-  <article class="rec r2" data-a>
-    <div class="rec-art yellow"><em>2</em>🍝</div>
-    <div class="rec-body"><small>이탈리안 · 이천 설봉공원 인근</small><h4>라 테라짜</h4><div class="mt"><span class="star">★ 4.5</span><span>1인 평균 36,900원</span><span>4개 부서 방문</span></div>
-      <div class="score"><label>2순위</label><div class="sb"><i style="width:64%"></i></div><b><small>예산 초과</small></b></div></div>
-  </article>
-  <div class="fresh" data-a>
-    <i>✦</i><div><b>늘 가던 곳이 아닌, 새로운 제안</b><span>후기가 적은 곳 3곳을 따로 추천 · 예) 온기 샤브샤브</span></div>
-    <figure class="shot"><div class="vp"><img src="assets/ui/fresh.jpg" alt="완전히 새로운 제안 화면"></div></figure>
-  </div>
-  <div class="reasons glass" data-a="right">
-    <h5>추천도 78점<small>/ 100점</small></h5>
-    <p class="rs-desc">퍼센트가 아니라 에이전트가 매긴 점수입니다. 이맘때 방문 횟수, 후기, 단체 사진, 날씨, 예산, 부서원 취향을 합쳤습니다.</p>
-    <ul>
-      <li data-src="0">가을에 3번 방문 (우리·타부서 전표 합산)</li>
-      <li data-src="1">후기 평점 4.3점 (10건)</li>
-      <li data-src="2">블로그·동아리 단체 사진 2건</li>
-      <li class="dot" data-src="0">우리 부서는 처음 가는 곳</li>
-      <li data-src="5">1인당 약 26,400원, 예산 이내</li>
-      <li class="warn" data-src="4">채식 메뉴 부족 (김지우)</li>
-    </ul>
-    <button class="btn red vn-confirm mag">이곳으로 확정하고 안내 메일 보내기</button>
-  </div>
-  <aside class="notes"><p>날짜가 정해지면 에이전트가 장소를 추천합니다. 우리 부서와 다른 부서의 경비 기록, 참석자 후기, 사내 블로그의 단체 사진, 그날의 날씨, 부서원의 식이 제한과 선호까지 함께 고려합니다.</p><p>추천도의 이유와 근거가 된 기록을 확인할 수 있고, 늘 가던 곳이 아닌 새로운 장소도 따로 제안합니다. 장소를 확정하면 참석자 전원에게 안내 메일이 발송됩니다.</p></aside>
-</section>
+  <section class="slide strategy" data-title="실현 가능성과 도입 조건" aria-label="12. 실현 가능성과 도입 조건">
+  <div class="strategy-heading"><p class="section-label">실현 가능성</p><h2>경비 처리 자료가<br>도입의 출발점입니다.</h2><p class="lead">새로운 입력 부담을 줄이고, 기존 기록을 활용합니다.</p></div>
+  <div class="strategy-columns"><article><h3>활용할 수 있는 기반</h3><p>회식·행사 후 작성하는 경비 서류에는 비용과 사용처가 남습니다. 실제 데이터의 항목과 품질을 확인하면 활동 이력으로 정리할 수 있습니다.</p></article><article><h3>실제 도입에 필요한 조건</h3><p>ERP·캘린더 접근 권한, 부서·장소 데이터 정리, 사내 인증과 메일 연동이 필요합니다. 후기 수집 기준과 개인정보 열람 범위도 정해야 합니다.</p></article></div>
+  <div class="statement"><strong>도입 제안: 한 부서에서 먼저 검증</strong><p>과거 전표를 활동 이력으로 정리한 뒤, 실제 기획에 적용해 추천 정확도와 담당자 사용성을 확인합니다.</p></div>
+  </section>
 
-<!-- 12 · after confirmation -->
-<section class="slide s-pipe" data-id="pipe" data-theme="light" data-title="③ 예약·안내·사후 설문">
-  <i class="blob" style="--c:#ffe1c9;left:1300px;top:600px;width:600px;height:600px"></i>
-  <div class="pp-head">
-    <span class="kicker" data-a><b>02</b> 핵심 기능 ③ 확정 이후</span>
-    <h2 class="title" data-split>확정하면, <em>예약·안내·설문</em>까지</h2>
-    <p class="lede" data-a>예약 페이지로 바로 연결하고 참석자에게 안내 메일을 보냅니다. 활동 후 ERP 경비 전표가 올라오면 에이전트가 감지해 기록하고, 사후 설문을 발송합니다.</p>
-  </div>
-  <div class="pipe" data-a="fade">
-    <div class="pp-line"><i class="pp-fill"></i></div>
-    <div class="voucher">🧾 EX202610-5122 · 150,000원</div>
-    <article class="stage-card" style="left:0"><span class="no">1</span><figure class="shot crop" style="--cx:280;--cy:90;--cw:1040;--ch:660"><div class="vp"><img src="assets/ui/confirm.jpg" alt="확정 화면"></div></figure><h4>확정·예약</h4><p>후기 폼 발송 여부를 정하고 예약 페이지로 바로 이동</p></article>
-    <article class="stage-card" style="left:340px"><span class="no">2</span><figure class="shot crop" style="--cx:280;--cy:90;--cw:1040;--ch:660"><div class="vp"><img src="assets/ui/guidemail.jpg" alt="안내 메일"></div></figure><h4>참석 안내</h4><p>날짜·장소가 담긴 안내 메일을 참석자 전원에게</p></article>
-    <article class="stage-card" style="left:680px"><span class="no">3</span><figure class="shot"><div class="vp"><img src="assets/ui/erp.jpg" alt="ERP 경비 전표 작성 화면"></div></figure><h4>ERP 경비 전표</h4><p>활동 후 담당자가 법인카드 전표를 작성·저장</p></article>
-    <article class="stage-card" style="left:1020px"><span class="no">4</span><figure class="shot crop" style="--cx:280;--cy:90;--cw:1040;--ch:660"><div class="vp"><img src="assets/ui/record.jpg" alt="자동 등록된 활동 기록"></div></figure><h4>자동 기록</h4><p>에이전트가 전표를 감지해 부서 기록으로 등록</p></article>
-    <article class="stage-card" style="left:1360px"><span class="no">5</span><figure class="shot crop" style="--cx:280;--cy:90;--cw:1040;--ch:660"><div class="vp"><img src="assets/ui/automail.jpg" alt="기록 알림과 후기 폼 메일"></div></figure><h4>사후 설문</h4><p>담당자 알림 메일, 참석자 후기 폼 발송</p></article>
-  </div>
-  <div class="pp-bottom">
-    <div class="erp-box glass" data-a><h5>ERP 경비 처리 내용<small>전표에서 자동 수집</small></h5>
-      <dl><dt>전표번호</dt><dd>EX202610-5122</dd><dt>계정</dt><dd>회의비 (53210) · 한식</dd><dt>인원</dt><dd>6명</dd><dt>금액</dt><dd>150,000원 (1인당 25,000원)</dd></dl></div>
-    <div class="comment glass" data-a><h5>담당자 코멘트<small>다음 담당자에게</small></h5><div class="bubble"><span class="typed"></span><i class="caret"></i></div><p>담당자는 메일에서 기록을 확인하고 코멘트만 남기면 됩니다.</p></div>
-    <div class="auto-list glass" data-a><h5>에이전트가 자동으로</h5><ul><li><i>✓</i>부서 기록 자동 등록</li><li><i>✓</i>담당자 알림 메일</li><li><i>✓</i>참석자 후기 폼 발송</li></ul></div>
-  </div>
-  <aside class="notes"><p>장소를 확정하면 안내 메일이 발송되고, 확정 화면에서는 후기 폼을 보낼지 정하고 예약 페이지로 바로 이동할 수 있습니다.</p><p>활동이 끝나면 담당자는 ERP에서 법인카드 경비 전표를 작성하고 저장합니다. 에이전트는 이 전표를 감지해 부서 기록으로 자동 등록하고, 담당자에게는 알림 메일이, 참석자에게는 후기 폼이 발송됩니다. 담당자는 다음 담당자를 위한 코멘트만 남기면 됩니다.</p></aside>
-</section>
+  <section class="slide strategy impact" data-title="기대효과와 효과 확인 방법" aria-label="13. 기대효과와 효과 확인 방법">
+  <div class="strategy-heading"><p class="section-label">기대효과</p><h2>준비 부담은 줄이고,<br>좋았던 경험은 이어갑니다.</h2></div>
+  <div class="strategy-columns"><article><h3>담당자의 본래 업무에 집중</h3><p>과거 사례와 비용을 다시 찾고 정리하는 부담을 줄입니다. 일정 조율부터 안내·사후 의견 수렴까지 연결해 반복 업무를 줄이는 것이 목표입니다.</p></article><article><h3>구성원의 선호를 다음 선택에</h3><p>활동 후기와 개인 선호를 반영해 만족했던 경험을 유지합니다. 동시에 새로운 장소와 활동도 비교하며 선택의 폭을 넓힙니다.</p></article></div>
+  <div class="measurements"><h3>도입 후 이렇게 확인합니다</h3><div><span>준비·의견 조율 시간<small>활동별 투입 시간을 도입 전후 비교</small></span><span>구성원 만족도<small>활동 후 동일한 문항으로 조사</small></span><span>재방문 의향<small>후기와 함께 수집해 다음 추천에 반영</small></span></div><p>기대효과이며, 아직 실제 도입 성과를 측정한 수치는 없습니다.</p></div>
+  </section>
 
-<!-- 13 · records feed the next plan -->
-<section class="slide s-records" data-id="records" data-theme="light" data-title="③ 다음 추천에 반영">
-  <div class="rd-copy">
-    <span class="kicker" data-a><b>02</b> 핵심 기능 ③ 다음 추천에 반영</span>
-    <h2 class="title" data-split>모인 후기가,<br>다음 추천의 <em>출발점</em></h2>
-    <p class="lede" data-a>후기와 선호는 다음 추천에 반영되고, 담당자가 바뀌어도 기록과 코멘트가 남습니다. 다음 담당자는 처음부터 찾고 묻지 않아도 됩니다.</p>
-  </div>
-  <div class="mem" aria-label="쌓이는 활동 기록">
-    <div class="ly" style="--i:0;top:368px;--c:var(--orange)"><time>1월 30일</time><em>🍖</em>화로담 숯불갈비<small>★ 4.5</small></div>
-    <div class="ly" style="--i:1;top:308px;--c:var(--act)"><time>3월 4일</time><em>🎳</em>스트라이크 볼링센터<small>★ 4.6</small></div>
-    <div class="ly" style="--i:2;top:248px;--c:var(--red)"><time>5월 8일</time><em>🍚</em>돌밥상 이천쌀밥 한정식<small>★ 4.6</small></div>
-    <div class="ly" style="--i:3;top:188px;--c:var(--orange)"><time>5월 29일</time><em>🍖</em>화로담 숯불갈비<small>★ 4.3</small></div>
-    <div class="ly" style="--i:4;top:128px;--c:var(--red)"><time>7월 31일</time><em>🍚</em>돌밥상 이천쌀밥 한정식<small>★ 4.3</small></div>
-    <div class="ly" style="--i:5;top:68px;--c:var(--orange)"><time>9월 4일</time><em>🍖</em>화로담 숯불갈비<small>★ 5.0</small></div>
-    <div class="ly new" style="top:8px"><time>10월 8일</time><em>🍲</em>솥뚜껑 닭볶음탕<small>NEW · 자동 등록</small></div>
-  </div>
-  <div class="rd-tabs" data-a>
-    <button data-cap="우리 부서 기록" data-desc="입사 전 활동까지 한눈에, 담당자 코멘트와 함께">우리 부서 기록<i class="pb"></i></button>
-    <button data-cap="타부서 레퍼런스" data-desc="다른 부서가 언제·어디서·얼마를 썼고, 반응은 어땠는지">타부서 레퍼런스<i class="pb"></i></button>
-    <button data-cap="부서원 선호사항" data-desc="알레르기와 선호를 한 화면에서 관리하고 다음 추천에 바로 반영">부서원 선호사항<i class="pb"></i></button>
-  </div>
-  <div class="sdeck fade" id="rec-deck" data-a="fade">
-    <figure class="shot"><div class="bar"><i></i><i></i><i></i><span>우리 부서 기록</span></div><div class="vp"><img src="assets/ui/timeline.jpg" alt="우리 부서 활동 기록 타임라인"></div></figure>
-    <figure class="shot"><div class="bar"><i></i><i></i><i></i><span>타부서 레퍼런스</span></div><div class="vp"><img src="assets/ui/others.jpg" alt="타부서 레퍼런스 표"></div></figure>
-    <figure class="shot"><div class="bar"><i></i><i></i><i></i><span>부서원 선호사항 설정</span></div><div class="vp"><img src="assets/ui/prefs.jpg" alt="부서원 식이 제한과 선호 설정 화면"></div></figure>
-  </div>
-  <div class="rd-cap"><b>우리 부서 기록</b><span>입사 전 활동까지 한눈에, 담당자 코멘트와 함께</span></div>
-  <aside class="notes"><p>이렇게 쌓인 기록은 다음 기획의 출발점이 됩니다. 담당자가 바뀌어도 기록과 코멘트가 남기 때문에, 다음 담당자나 신입도 처음부터 찾고 물어볼 필요가 없습니다. 우리 부서 기록에서는 입사 전 활동까지 한눈에 볼 수 있습니다.</p><p>타부서 레퍼런스에서는 다른 부서가 언제, 어디서, 얼마를 썼는지, 반응은 어땠는지 확인할 수 있습니다. 부서원의 알레르기와 선호사항도 한 화면에서 관리하고, 다음 추천에 바로 반영됩니다.</p></aside>
-</section>
-
-<!-- 14 · agent log -->
-<section class="slide s-log" data-id="log" data-theme="dark" data-transition="wipe" data-title="에이전트 로그">
-  <div class="ghost" style="background-image:url(assets/ui/log.jpg);opacity:calc(var(--ui-op) * .07)"></div>
-  <div class="lg-copy">
-    <span class="kicker" data-a><b>02</b> 핵심 기능 · 테스트 환경 실행</span>
-    <h2 class="title" data-split>에이전트가 한 일은,<br><em>모두 로그로</em></h2>
-    <p class="lede" data-a>테스트 환경에서 에이전트가 수행한 추천, 안내 메일, 예약 준비, 설문 발송, 기록 등록을 시간순으로 확인할 수 있습니다.</p>
-    <div class="fchips" data-a><button class="on" data-k="all">전체</button><button data-k="추천">추천</button><button data-k="날씨">날씨</button><button data-k="메일">메일</button><button data-k="예약">예약</button><button data-k="후기">후기</button><button data-k="기록">기록</button><button data-k="ERP">ERP</button></div>
-    <p class="lg-note" data-a>시연 중 실제로 남은 로그 일부입니다.</p>
-  </div>
-  <div class="logp" data-a="right">
-    <header><b>에이전트 로그</b><p>에이전트가 캘린더·ERP·메일을 다룬 내역이 최신순으로 쌓입니다.</p></header>
-    <ol></ol>
-  </div>
-  <aside class="notes"><p>에이전트가 수행한 작업은 로그에서 모두 확인할 수 있습니다.</p><p>날짜 조율부터 장소 추천, 안내, 경비 기록, 후기까지.</p></aside>
-</section>
-
-<!-- 15 · feasibility & expected effects -->
-<section class="slide s-effect" data-id="effect" data-theme="light" data-title="실현가능성·기대효과">
-  <i class="blob" style="--c:#ffd9c2;left:1150px;top:-150px;width:640px;height:640px"></i>
-  <i class="blob" style="--c:#d8f1e3;left:-150px;top:700px;width:520px;height:520px;animation-delay:-8s"></i>
-  <div class="ef-head">
-    <span class="kicker" data-a><b>03</b> 실현가능성 및 기대효과</span>
-    <h2 class="title" data-split>이미 있는 데이터로, <em>바로 시작</em>할 수 있습니다</h2>
-  </div>
-  <div class="feas glass" data-a="left">
-    <h4>실현 가능성</h4>
-    <p>경비 처리 관련 서류는 이미 정리되어 있습니다. 새로 만들 필요 없이, 흩어진 기록을 모으기만 하면 됩니다.</p>
-    <ul>
-      <li><i>🧾</i><div>ERP 경비 전표<small>언제·어디서·몇 명이·얼마를</small></div></li>
-      <li><i>📅</i><div>캘린더·연차·과제 일정<small>날짜 후보 계산</small></div></li>
-      <li><i>📨</i><div>조직도·사내 메일<small>참석자 선택·투표·안내·설문</small></div></li>
-      <li><i>✅</i><div>데모로 전 흐름 검증<small>가상 데이터·테스트 환경에서 기획부터 기록까지</small></div></li>
-    </ul>
-    <p class="scope"><b>현재는 데모입니다.</b> 화면의 인물·경비·일정은 시연 데이터이며, 실제 적용에는 사내 ERP·캘린더·메일 연동과 권한 확인이 필요합니다.</p>
-  </div>
-  <div class="effects">
-    <div class="flip" data-a style="--c1:#f47b20;--c2:#e4002b">
-      <div class="face front"><span class="ico">🔎</span><span class="tag">기대효과 ①</span><h4>찾고 정리하는<br>부담 감소</h4><p>경비처리 과정의 정보를 다음 기획에 재활용해, 처음 맡은 담당자도 과거 사례와 비용을 다시 찾고 묻고 정리하는 부담을 줄입니다.</p><span class="hint">마우스를 올리면 측정 방법 ↻</span></div>
-      <div class="face back"><small>이렇게 확인합니다</small><b>담당자의<br>준비 시간</b><p>기획을 시작해 확정하기까지 걸린 시간을 도입 전후로 비교합니다.</p></div>
-    </div>
-    <div class="flip" data-a style="--c1:#8f63e6;--c2:#5a33bf">
-      <div class="face front"><span class="ico">🔗</span><span class="tag" style="color:#5a33bf">기대효과 ②</span><h4>반복 업무를<br>하나로 연결</h4><p>일정 조율, 예약, 안내, 사후 의견 수렴을 연결해 반복 업무를 줄이고, 담당자가 본래 업무에 집중하도록 돕습니다.</p><span class="hint">마우스를 올리면 측정 방법 ↻</span></div>
-      <div class="face back"><small>이렇게 확인합니다</small><b>의견 조율<br>시간</b><p>투표·안내·설문에 들인 시간과 주고받은 연락을 함께 봅니다.</p></div>
-    </div>
-    <div class="flip" data-a style="--c1:#25b071;--c2:#137a4b">
-      <div class="face front"><span class="ico">💛</span><span class="tag" style="color:#137a4b">기대효과 ③</span><h4>만족은 유지,<br>선택은 새롭게</h4><p>구성원의 선호와 활동 후기를 다음 추천에 반영해, 만족했던 경험은 유지하면서 새로운 선택도 검토합니다.</p><span class="hint">마우스를 올리면 측정 방법 ↻</span></div>
-      <div class="face back"><small>이렇게 확인합니다</small><b>만족도와<br>재방문 의향</b><p>활동이 끝날 때마다 사후 설문으로 수집해 다음 추천에 반영합니다.</p></div>
-    </div>
-  </div>
-  <div class="metrics glass" data-a>
-    <b>도입 후 평가</b><span>담당자 준비·의견 조율 시간</span><i>+</i><span>구성원 만족도</span><i>+</i><span>재방문 의향</span><span class="loop">→ 지속 개선</span>
-  </div>
-  <aside class="notes"><p>경비처리 서류처럼 이미 정리된 데이터가 있고, 흩어진 것을 모으기만 하면 되기 때문에 실현 가능성은 있다고 봅니다.</p><p>기대효과는 세 가지입니다. 경비처리 정보를 다음 기획에 재활용해 과거 사례와 비용을 다시 찾는 부담을 줄이고, 일정 조율·예약·안내·의견 수렴을 연결해 반복 업무를 줄입니다. 그리고 구성원의 선호와 후기를 다음 추천에 반영해 만족했던 경험은 유지하면서 새로운 선택도 검토할 수 있습니다.</p><p>도입 후에는 담당자의 준비·의견 조율 시간, 구성원의 만족도와 재방문 의향으로 효과를 확인하고 계속 개선하겠습니다.</p></aside>
-</section>
-
-<!-- 16 · conclusion & peer feedback -->
-<section class="slide s-feedback" data-id="feedback" data-theme="light" data-title="결론·동료 피드백">
-  <i class="blob" style="--c:#ffd0d8;left:-140px;top:-140px;width:600px;height:600px"></i>
-  <div class="fb-copy">
-    <span class="kicker" data-a><b>04</b> 결론</span>
-    <h2 class="title" data-split>담당자의 부담은 줄이고,<br><em>구성원의 행복</em>은 키웁니다</h2>
-    <p class="lede" data-a>행복한 조직문화를 위해, HBM은 흩어진 데이터를 모아 처음 맡은 담당자와 신입의 부담을 줄이고 구성원의 행복을 증진시킵니다.</p>
-    <div class="recap" data-a><span>흩어진 데이터 통합</span><span>경비 데이터 선별</span><span>날짜 후보·투표</span><span>장소·활동 추천</span><span>예약·안내</span><span>사후 설문</span><span>다음 추천 반영</span></div>
-  </div>
-  <div class="board-fb glass" data-a="right">
-    <header><b>동료 피드백을 받고 싶어요</b><p>떠오르는 의견을 바로 적어 주세요 · 이 브라우저에만 저장됩니다</p></header>
-    <div class="fb-cols">
-      <div class="fb-col" data-col="feat"><h5><i>✨</i>추가하면 좋은 기능</h5><p>있으면 더 자주 쓸 것 같은 기능은?</p><div class="notes-wall"></div></div>
-      <div class="fb-col" data-col="ux"><h5><i>🎨</i>UI/UX 개선점</h5><p>헷갈리거나 불편했던 화면은?</p><div class="notes-wall"></div></div>
-    </div>
-    <form class="fb-form" autocomplete="off">
-      <div class="seg"><button type="button" class="on" data-col="feat">기능</button><button type="button" data-col="ux">UI/UX</button></div>
-      <input placeholder="의견을 입력하고 Enter" aria-label="피드백 입력" maxlength="80">
-      <button class="btn red" type="submit">붙이기</button>
-    </form>
-  </div>
-  <aside class="notes"><p>결론입니다. 흩어진 데이터를 하나로 모아, 처음 맡은 담당자와 신입의 부담을 줄이고 구성원의 행복을 증진시킬 수 있습니다.</p><p>동료분들께는 두 가지 피드백을 받고 싶습니다. 추가하면 좋은 기능, 그리고 UI/UX 개선점입니다.</p></aside>
-</section>
-
-<!-- 17 · thanks -->
-<section class="slide s-end" data-id="end" data-theme="red" data-chrome="min" data-transition="iris" data-title="감사합니다">
-  <div class="end-float" aria-hidden="true">
-    <i style="--x:8%;--y:16%;--w:200px;--t:14s;--b:3px;--r:-8deg"></i>
-    <i style="--x:76%;--y:70%;--w:280px;--t:18s;--b:5px;--r:6deg"></i>
-    <i style="--x:30%;--y:86%;--w:170px;--t:12s;--b:2px;--r:10deg"></i>
-    <i style="--x:64%;--y:8%;--w:150px;--t:16s;--b:1px;--r:-6deg"></i>
-  </div>
-  <div class="end-art" data-a="drop"><div class="stack-host"></div></div>
-  <div class="end-buddy" data-a="pop"><div class="buddy-host"></div></div>
-  <div class="end-wrap">
-    <p class="end-line" data-split>함께 쌓는 유대감,<br><em>계속 남는 기억</em>.</p>
-    <div class="thanks" data-a="pop">감사합니다</div>
-    <p class="team" data-a>승진하고 싶은 승진팀 · Happy Bonding Memory</p>
-    <div class="end-acts" data-a>
-      <a class="mag" href="https://2-oneteam-project-vxvu.vercel.app/" target="_blank" rel="noopener">HBM 직접 보기 ↗</a>
-      <button class="mag" data-goto="2">시연 영상 다시 보기</button>
-    </div>
-  </div>
-  <p class="end-hint">화면을 눌러 보세요</p>
-  <aside class="notes"><p>HBM은 처음 맡은 담당자, 특히 신입도 한 번의 흐름으로 조직문화활동을 준비할 수 있게 돕습니다.</p><p>감사합니다. 이상으로, 승진하고 싶은 승진팀이었습니다.</p></aside>
-</section>
-
-  <!-- chrome -->
-  <div id="glow" class="chrome"></div>
-  <div id="grain" class="chrome"></div>
-  <div id="topline" class="chrome"><i></i></div>
-  <header id="brand" class="chrome"><b>HBM</b><span>Happy Bonding Memory</span></header>
-  <img id="corp" class="chrome" src="assets/sk-hynix.png" alt="SK hynix">
-  <nav id="stackbar" class="chrome" aria-label="슬라이드 진행"></nav>
-  <div id="pager" class="chrome"><button id="prev" aria-label="이전 슬라이드">←</button><span id="pnum"><b>01</b> / 17</span><button id="next" aria-label="다음 슬라이드">→</button></div>
-  <div id="tools" class="chrome">
-    <button data-tool="grid">목차<kbd>G</kbd></button>
-    <button data-tool="notes">노트<kbd>N</kbd></button>
-    <label class="op">UI 투명도 <input id="opacity" type="range" min="0" max="0.5" step="0.01" value="0.1" aria-label="UI 화면 투명도"><output>10%</output></label>
-    <button data-tool="full">전체 화면<kbd>F</kbd></button>
-  </div>
-  <aside id="notes" class="chrome" aria-live="polite"><span class="nt-label">발표자 노트</span><div class="nt-body"></div></aside>
-  <div id="hint" class="chrome">→ / ← 넘기기 · G 목차 · N 발표자 노트 · F 전체 화면</div>
-  <div id="toast" class="chrome" role="status"></div>
-  <div id="lightbox"><img alt=""><p>실제 화면 원본 · 클릭하거나 Esc로 닫기</p></div>
-  <div id="ovtitle" class="chrome">슬라이드 목차<small>클릭하면 이동 · Esc 닫기</small></div>
+  <section class="slide feedback" data-title="결론과 동료 피드백" aria-label="14. 결론과 동료 피드백">
+  <div class="feedback-intro"><p class="section-label">결론</p><div class="feedback-brand">HBM<span>.</span></div><h2>담당자의 부담을 줄여<br>행복한 조직문화를<br>함께 만듭니다.</h2><p>기록을 기획에 재활용하고, 구성원의 의견을 다음 활동에 반영해 만족도와 행복을 높이고자 합니다.</p><button class="secondary" data-go="1">2페이지 시연 영상 다시 보기</button></div>
+  <div class="feedback-questions"><p class="section-label">동료 여러분의 피드백을 기다립니다</p><article><span>기능</span><h3>어떤 기능을 더하면 좋을까요?</h3><p>직접 기획을 맡는다면 가장 도움받고 싶은 업무는 무엇인가요? 지금 흐름에서 빠진 단계가 있나요?</p></article><article><span>UI / UX</span><h3>어디를 더 쉽게 바꿀까요?</h3><p>추천 근거와 날짜 선택이 이해하기 쉬운가요? 화면이나 버튼 중 헷갈렸던 부분을 알려 주세요.</p></article><a href="https://2-oneteam-project-vxvu.vercel.app/" target="_blank" rel="noopener">HBM 직접 살펴보기 ↗</a><small>승진하고 싶은 승진팀</small></div>
+  </section>
 </main>
-</div>
-<script src="assets/deck.js"></script>
-<script src="assets/slides.js"></script>
-</body>
-</html>
+<footer class="navigation"><span id="slide-title">Happy Bonding Memory</span><div id="dots" aria-label="슬라이드 바로가기"></div><div class="pager"><button id="prev" aria-label="이전 슬라이드">←</button><span><b id="current">01</b> / <span id="total">14</span></span><button id="next" aria-label="다음 슬라이드">→</button></div></footer><div class="progress" aria-hidden="true"><i id="progress"></i></div><span id="announcement" class="sr-only" aria-live="polite"></span>
+<dialog id="overview"><div class="dialog-head"><h2>발표 목차</h2><button data-close="overview" aria-label="목차 닫기">닫기 ×</button></div><div id="overview-list"></div></dialog>
+<dialog id="lightbox"><div class="dialog-head"><span>영상에서 가져온 실제 UI</span><button data-close="lightbox" aria-label="확대 이미지 닫기">닫기 ×</button></div><img id="full-image" alt="확대한 HBM 화면"><p>확대 화면은 원본 선명도로 표시합니다.</p></dialog>
+<script src="slides.js"></script>
+</body></html>
